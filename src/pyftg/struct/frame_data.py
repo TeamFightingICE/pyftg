@@ -24,3 +24,6 @@ class FrameData:
     
     def get_character(self, player: bool):
         return self.character_data[0 if player else 1]
+    
+    def get_projectiles_by_player(self, player: bool):
+        return [x for x in self.projectile_data if x.player_number == player]

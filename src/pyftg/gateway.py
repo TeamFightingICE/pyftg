@@ -2,13 +2,17 @@ from .protoc import service_pb2, service_pb2_grpc
 from .ai_controller import AIController
 from .ai_interface import AIInterface
 from .util import load_ai
+import logging
 import grpc
 
 class Gateway:
     def __init__(self, host='127.0.0.1', port=50051):
         self.host = host
         self.port = port
-        self.channel = grpc.insecure_channel(f'{host}:{port}')
+        self.channel = grpc.insecure_channel(
+            target=f"{host}:{port}",
+            compression=grpc.Compression.Gzip,
+        )
         self.stub = service_pb2_grpc.ServiceStub(self.channel)
         self.registered_agents: 'dict[str, AIInterface]' = dict()
         self.agents: 'list[AIInterface]' = [None, None]
@@ -36,6 +40,7 @@ class Gateway:
             if agent:
                 self.ais[i] = AIController(self.stub, agent, i == 0)
                 self.ais[i].start()
+                logging.info("AI controller is ready.")
         for ai in [x for x in self.ais if x]:
             ai.join()
     

@@ -1,5 +1,8 @@
 **/__pycache__/
 **/*.egg-info
+src/
 build/
 dist/
 .vscode/
+.DS_Store
+!src/pyftg
