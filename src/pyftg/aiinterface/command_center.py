@@ -1,5 +1,5 @@
-from .key import Key
-from .frame_data import FrameData
+from ..struct.key import Key
+from ..struct.frame_data import FrameData
 
 class CommandCenter:
     def __init__(self):

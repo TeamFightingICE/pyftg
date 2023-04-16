@@ -1,6 +1,6 @@
 from .protoc import service_pb2, service_pb2_grpc
-from .ai_controller import AIController
-from .ai_interface import AIInterface
+from .aiinterface.ai_controller import AIController
+from .aiinterface import AIInterface
 from .util import load_ai
 import logging
 import grpc

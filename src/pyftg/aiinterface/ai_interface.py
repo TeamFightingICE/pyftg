@@ -1,4 +1,4 @@
-from .struct import AudioData, ScreenData, FrameData, GameData, RoundResult, Key
+from ..struct import AudioData, ScreenData, FrameData, GameData, RoundResult, Key
 
 class AIInterface:
     def name(self) -> str:

@@ -1,8 +1,8 @@
 from .ai_interface import AIInterface
-from .struct.enumerate.flag import Flag
-from .struct import Key, FrameData, ScreenData, AudioData, GameData, RoundResult
-from .util import convert_key
-from .protoc import service_pb2, service_pb2_grpc
+from ..enum.flag import Flag
+from ..struct import Key, FrameData, ScreenData, AudioData, GameData, RoundResult
+from ..util import convert_key
+from ..protoc import service_pb2, service_pb2_grpc
 from threading import Thread
 
 class AIController(Thread):

@@ -1,5 +1,5 @@
 from .struct import Key
-from .ai_interface import AIInterface
+from .aiinterface import AIInterface
 from .protoc import message_pb2
 
 def convert_key(key: Key) -> message_pb2.GrpcKey:
