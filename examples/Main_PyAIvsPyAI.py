@@ -1,6 +1,6 @@
 import logging
 import argparse
-from pyftg.gateway import Gateway
+from pyftg import Gateway
 from KickAI import KickAI
 from DisplayInfo import DisplayInfo
 

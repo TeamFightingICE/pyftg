@@ -1,13 +1,13 @@
-from .ai_interface import AIInterface
-from ..enum.flag import Flag
-from ..struct import Key, FrameData, ScreenData, AudioData, GameData, RoundResult
-from ..util import convert_key
-from ..protoc import service_pb2, service_pb2_grpc
+from .aiinterface.ai_interface import AIInterface
+from .enum.flag import Flag
+from .struct import Key, FrameData, ScreenData, AudioData, GameData, RoundResult
+from .util import convert_key
+from .protoc import service_pb2, service_pb2_grpc
 from threading import Thread
 
 class AIController(Thread):
     def __init__(self, stub: service_pb2_grpc.ServiceStub, ai: AIInterface, player_number: bool):
-        super(AIController, self).__init__()
+        Thread.__init__(self)
         self.stub = stub
         self.ai = ai
         self.player_number = player_number

@@ -1,6 +1,6 @@
 import logging
 import argparse
-from pyftg.gateway import Gateway
+from pyftg import Gateway
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

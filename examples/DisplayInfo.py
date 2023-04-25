@@ -1,5 +1,4 @@
-from pyftg.aiinterface.ai_interface import AIInterface
-from pyftg.struct import *
+from pyftg import *
 
 class DisplayInfo(AIInterface):
     def __init__(self):
