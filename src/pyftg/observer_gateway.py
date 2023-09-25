@@ -1,6 +1,6 @@
 from .protoc import service_pb2, service_pb2_grpc
 from .enum.flag import Flag
-from .struct import FrameData, ScreenData, AudioData, RoundResult
+from .struct import GameData, FrameData, ScreenData, AudioData, RoundResult
 from .observer_handler import ObserverHandler
 import grpc
 
@@ -22,7 +22,9 @@ class ObserverGateway:
     def start(self):
         for state in self.spectate_rpc():
             flag = Flag(state.state_flag)
-            if flag is Flag.PROCESSING:
+            if flag is Flag.INITIALIZE:
+                self.handler.on_initialize(GameData(state.game_data))
+            elif flag is Flag.PROCESSING:
                 self.handler.on_game_update(FrameData(state.frame_data), ScreenData(state.screen_data), AudioData(state.audio_data))
             elif flag is Flag.ROUND_END:
                 self.handler.on_round_end(RoundResult(state.round_result))
