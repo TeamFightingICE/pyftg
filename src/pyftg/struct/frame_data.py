@@ -17,7 +17,7 @@ class FrameData:
             self.current_round: int = frame_data.current_round
             self.projectile_data = [AttackData(x) for x in frame_data.projectile_data]
             self.empty_flag: bool = frame_data.empty_flag
-            self.front = np.array(frame_data.front, dtype=np.bool8)
+            self.front = [bool(x) for x in frame_data.front]
 
     def is_front(self, player: bool):
         return self.front[0 if player else 1]
