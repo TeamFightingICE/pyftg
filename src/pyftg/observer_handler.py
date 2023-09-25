@@ -11,9 +11,5 @@ class ObserverHandler(ABC):
         pass
 
     @abstractmethod
-    def on_round_end(self, result: RoundResult):
-        pass
-
-    @abstractmethod
-    def on_game_end(self):
+    def on_round_end(self, result: RoundResult, game_end_flag: bool):
         pass

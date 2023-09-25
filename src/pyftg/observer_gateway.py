@@ -27,10 +27,9 @@ class ObserverGateway:
             elif flag is Flag.PROCESSING:
                 self.handler.on_game_update(FrameData(state.frame_data), ScreenData(state.screen_data), AudioData(state.audio_data))
             elif flag is Flag.ROUND_END:
-                self.handler.on_round_end(RoundResult(state.round_result))
+                self.handler.on_round_end(RoundResult(state.round_result), False)
             elif flag is Flag.GAME_END:
-                self.handler.on_round_end(RoundResult(state.round_result))
-                self.handler.on_game_end()
+                self.handler.on_round_end(RoundResult(state.round_result), True)
     
     def close(self):
         self.channel.close()

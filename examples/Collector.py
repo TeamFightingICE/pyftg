@@ -32,46 +32,41 @@ def todict(obj, classkey=None):
 
 class Collector(ObserverHandler):
     def __init__(self) -> None:
-        self.game_data: GameData
         self.frames = list()
-        self.images = list()
 
     def on_initialize(self, game: GameData):
         logging.info('initialize')
         self.game_data = game
+        self.change_directory()
 
     def on_game_update(self, frame_data: FrameData, screen_data: ScreenData, audio_data: AudioData):
-        if frame_data.current_frame_number % 60 == 1:
+        if frame_data.current_frame_number % 60 == 0:
             logging.info('round number: %s', frame_data.current_frame_number)
 
             img = np.reshape(bytearray(screen_data.display_bytes), (640, 960, 3))
             img = np.flipud(img)
             img = Image.fromarray(np.uint8(img))
+            img.save('{}/images/{:04d}.png'.format(self.path, frame_data.current_frame_number))
 
             self.frames.append(todict(frame_data))
-            self.images.append(img)
 
-    def on_round_end(self, round_result: RoundResult):
+    def on_round_end(self, round_result: RoundResult, is_game_end: bool):
         logging.info('round end: %s', round_result.elapsed_frame)
 
-        current_datetime = datetime.datetime.now()
-        formatted_datetime = current_datetime.strftime("%Y.%m.%d-%H.%M.%S")
-        path = 'Collector/{}'.format(formatted_datetime)
-
-        os.mkdir(path)
-        os.mkdir('{}/images'.format(path))
-
-        with open('{}/game_log.json'.format(path), 'w') as file:
+        with open('{}/game_log.json'.format(self.path), 'w') as file:
             file.write(json.dumps(self.frames, indent=2))
 
-        with open('{}/result.json'.format(path), 'w') as file:
+        with open('{}/result.json'.format(self.path), 'w') as file:
             file.write(json.dumps(todict(round_result), indent=2))
         
-        for i, img in enumerate(self.images):
-            img.save('{}/images/{}.png'.format(path, i))
-        
         self.frames.clear()
-        self.images.clear()
+        if not is_game_end:
+            self.change_directory()
 
-    def on_game_end(self):
-        logging.info('game end')
+    def change_directory(self):
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y.%m.%d-%H.%M.%S")
+        self.path = 'Collector/{}'.format(formatted_datetime)
+
+        os.mkdir(self.path)
+        os.mkdir('{}/images'.format(self.path))
