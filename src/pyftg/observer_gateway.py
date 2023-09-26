@@ -5,7 +5,7 @@ from .observer_handler import ObserverHandler
 import grpc
 
 class ObserverGateway:
-    def __init__(self, handler: ObserverHandler, host='127.0.0.1', port=50051):
+    def __init__(self, handler: ObserverHandler, interval=1, host='127.0.0.1', port=50051):
         self.host = host
         self.port = port
         self.channel = grpc.insecure_channel(
@@ -14,9 +14,10 @@ class ObserverGateway:
         )
         self.stub = service_pb2_grpc.ServiceStub(self.channel)
         self.handler = handler
+        self.interval = interval
 
     def spectate_rpc(self):
-        request = service_pb2.SpectateRequest()
+        request = service_pb2.SpectateRequest(interval=self.interval)
         return self.stub.Spectate(request)
     
     def start(self):
