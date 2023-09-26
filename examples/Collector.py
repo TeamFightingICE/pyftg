@@ -2,7 +2,9 @@ from pyftg.struct import GameData, FrameData, ScreenData, AudioData, RoundResult
 from pyftg import ObserverHandler
 from enum import Enum
 from PIL import Image
+import io
 import os
+import gzip
 import logging
 import json
 import datetime
@@ -33,6 +35,7 @@ def todict(obj, classkey=None):
 class Collector(ObserverHandler):
     def __init__(self) -> None:
         self.frames = list()
+        self.counter = 0
 
     def on_initialize(self, game: GameData):
         logging.info('initialize')
@@ -42,12 +45,17 @@ class Collector(ObserverHandler):
     def on_game_update(self, frame_data: FrameData, screen_data: ScreenData, audio_data: AudioData):
         logging.info('round number: %s', frame_data.current_frame_number)
 
-        img = np.reshape(bytearray(screen_data.display_bytes), (640, 960, 3))
+        compressed_display_bytes = io.BytesIO(screen_data.display_bytes)
+        with gzip.GzipFile(fileobj=compressed_display_bytes, mode='rb') as file:
+            decompressed_display_bytes = file.read()
+
+        img = np.reshape(bytearray(decompressed_display_bytes), (640, 960, 3))
         img = np.flipud(img)
-        img = Image.fromarray(np.uint8(img))
-        img.save('{}/images/{:04d}.png'.format(self.path, frame_data.current_frame_number))
+        img = Image.fromarray(img)
+        img.save('{}/images/{:03d}.png'.format(self.path, self.counter))
 
         self.frames.append(todict(frame_data))
+        self.counter += 1
 
     def on_round_end(self, round_result: RoundResult, is_game_end: bool):
         logging.info('round end: %s', round_result.elapsed_frame)
@@ -65,6 +73,7 @@ class Collector(ObserverHandler):
     def change_directory(self):
         current_datetime = datetime.datetime.now()
         formatted_datetime = current_datetime.strftime("%Y.%m.%d-%H.%M.%S")
+        self.counter = 0
         self.path = 'Collector/{}'.format(formatted_datetime)
 
         os.mkdir(self.path)
