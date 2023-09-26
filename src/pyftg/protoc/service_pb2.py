@@ -16,7 +16,7 @@ from . import enum_pb2 as enum__pb2
 from . import message_pb2 as message__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x07service\x1a\x1bgoogle/protobuf/empty.proto\x1a\nenum.proto\x1a\rmessage.proto\"s\n\x0eRunGameRequest\x12\x13\n\x0b\x63haracter_1\x18\x01 \x01(\t\x12\x13\n\x0b\x63haracter_2\x18\x02 \x01(\t\x12\x10\n\x08player_1\x18\x03 \x01(\t\x12\x10\n\x08player_2\x18\x04 \x01(\t\x12\x13\n\x0bgame_number\x18\x05 \x01(\x05\"#\n\x0fSpectateRequest\x12\x10\n\x08interval\x18\x01 \x01(\x05\"\x9b\x02\n\x12SpectatorGameState\x12%\n\nstate_flag\x18\x01 \x01(\x0e\x32\x11.service.GrpcFlag\x12(\n\tgame_data\x18\x02 \x01(\x0b\x32\x15.service.GrpcGameData\x12*\n\nframe_data\x18\x03 \x01(\x0b\x32\x16.service.GrpcFrameData\x12,\n\x0bscreen_data\x18\x04 \x01(\x0b\x32\x17.service.GrpcScreenData\x12*\n\naudio_data\x18\x05 \x01(\x0b\x32\x16.service.GrpcAudioData\x12.\n\x0cround_result\x18\x06 \x01(\x0b\x32\x18.service.GrpcRoundResult\"Q\n\x11InitializeRequest\x12\x15\n\rplayer_number\x18\x01 \x01(\x08\x12\x13\n\x0bplayer_name\x18\x02 \x01(\t\x12\x10\n\x08is_blind\x18\x03 \x01(\x08\")\n\x12InitializeResponse\x12\x13\n\x0bplayer_uuid\x18\x01 \x01(\t\")\n\x12ParticipateRequest\x12\x13\n\x0bplayer_uuid\x18\x01 \x01(\t\"\xe2\x02\n\x0fPlayerGameState\x12%\n\nstate_flag\x18\x01 \x01(\x0e\x32\x11.service.GrpcFlag\x12\x12\n\nis_control\x18\x02 \x01(\x08\x12*\n\nframe_data\x18\x03 \x01(\x0b\x32\x16.service.GrpcFrameData\x12\x34\n\x14non_delay_frame_data\x18\x04 \x01(\x0b\x32\x16.service.GrpcFrameData\x12,\n\x0bscreen_data\x18\x05 \x01(\x0b\x32\x17.service.GrpcScreenData\x12*\n\naudio_data\x18\x06 \x01(\x0b\x32\x16.service.GrpcAudioData\x12(\n\tgame_data\x18\x07 \x01(\x0b\x32\x15.service.GrpcGameData\x12.\n\x0cround_result\x18\x08 \x01(\x0b\x32\x18.service.GrpcRoundResult\"G\n\x0bPlayerInput\x12\x13\n\x0bplayer_uuid\x18\x01 \x01(\t\x12#\n\tinput_key\x18\x02 \x01(\x0b\x32\x10.service.GrpcKey2\xda\x02\n\x07Service\x12<\n\x07RunGame\x12\x17.service.RunGameRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x08Spectate\x12\x18.service.SpectateRequest\x1a\x1b.service.SpectatorGameState\"\x00\x30\x01\x12G\n\nInitialize\x12\x1a.service.InitializeRequest\x1a\x1b.service.InitializeResponse\"\x00\x12H\n\x0bParticipate\x12\x1b.service.ParticipateRequest\x1a\x18.service.PlayerGameState\"\x00\x30\x01\x12\x37\n\x05Input\x12\x14.service.PlayerInput\x1a\x16.google.protobuf.Empty\"\x00\x42\x1e\n\x06protocB\x0cServiceProtoP\x00\xa2\x02\x03HLWb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x07service\x1a\x1bgoogle/protobuf/empty.proto\x1a\nenum.proto\x1a\rmessage.proto\"s\n\x0eRunGameRequest\x12\x13\n\x0b\x63haracter_1\x18\x01 \x01(\t\x12\x13\n\x0b\x63haracter_2\x18\x02 \x01(\t\x12\x10\n\x08player_1\x18\x03 \x01(\t\x12\x10\n\x08player_2\x18\x04 \x01(\t\x12\x13\n\x0bgame_number\x18\x05 \x01(\x05\"o\n\x0fSpectateRequest\x12\x10\n\x08interval\x18\x01 \x01(\x05\x12\x17\n\x0f\x66rame_data_flag\x18\x02 \x01(\x08\x12\x18\n\x10screen_data_flag\x18\x03 \x01(\x08\x12\x17\n\x0f\x61udio_data_flag\x18\x04 \x01(\x08\"\x9b\x02\n\x12SpectatorGameState\x12%\n\nstate_flag\x18\x01 \x01(\x0e\x32\x11.service.GrpcFlag\x12(\n\tgame_data\x18\x02 \x01(\x0b\x32\x15.service.GrpcGameData\x12*\n\nframe_data\x18\x03 \x01(\x0b\x32\x16.service.GrpcFrameData\x12,\n\x0bscreen_data\x18\x04 \x01(\x0b\x32\x17.service.GrpcScreenData\x12*\n\naudio_data\x18\x05 \x01(\x0b\x32\x16.service.GrpcAudioData\x12.\n\x0cround_result\x18\x06 \x01(\x0b\x32\x18.service.GrpcRoundResult\"Q\n\x11InitializeRequest\x12\x15\n\rplayer_number\x18\x01 \x01(\x08\x12\x13\n\x0bplayer_name\x18\x02 \x01(\t\x12\x10\n\x08is_blind\x18\x03 \x01(\x08\")\n\x12InitializeResponse\x12\x13\n\x0bplayer_uuid\x18\x01 \x01(\t\")\n\x12ParticipateRequest\x12\x13\n\x0bplayer_uuid\x18\x01 \x01(\t\"\xe2\x02\n\x0fPlayerGameState\x12%\n\nstate_flag\x18\x01 \x01(\x0e\x32\x11.service.GrpcFlag\x12\x12\n\nis_control\x18\x02 \x01(\x08\x12*\n\nframe_data\x18\x03 \x01(\x0b\x32\x16.service.GrpcFrameData\x12\x34\n\x14non_delay_frame_data\x18\x04 \x01(\x0b\x32\x16.service.GrpcFrameData\x12,\n\x0bscreen_data\x18\x05 \x01(\x0b\x32\x17.service.GrpcScreenData\x12*\n\naudio_data\x18\x06 \x01(\x0b\x32\x16.service.GrpcAudioData\x12(\n\tgame_data\x18\x07 \x01(\x0b\x32\x15.service.GrpcGameData\x12.\n\x0cround_result\x18\x08 \x01(\x0b\x32\x18.service.GrpcRoundResult\"G\n\x0bPlayerInput\x12\x13\n\x0bplayer_uuid\x18\x01 \x01(\t\x12#\n\tinput_key\x18\x02 \x01(\x0b\x32\x10.service.GrpcKey2\xda\x02\n\x07Service\x12<\n\x07RunGame\x12\x17.service.RunGameRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x08Spectate\x12\x18.service.SpectateRequest\x1a\x1b.service.SpectatorGameState\"\x00\x30\x01\x12G\n\nInitialize\x12\x1a.service.InitializeRequest\x1a\x1b.service.InitializeResponse\"\x00\x12H\n\x0bParticipate\x12\x1b.service.ParticipateRequest\x1a\x18.service.PlayerGameState\"\x00\x30\x01\x12\x37\n\x05Input\x12\x14.service.PlayerInput\x1a\x16.google.protobuf.Empty\"\x00\x42\x1e\n\x06protocB\x0cServiceProtoP\x00\xa2\x02\x03HLWb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -28,19 +28,19 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_RUNGAMEREQUEST']._serialized_start=82
   _globals['_RUNGAMEREQUEST']._serialized_end=197
   _globals['_SPECTATEREQUEST']._serialized_start=199
-  _globals['_SPECTATEREQUEST']._serialized_end=234
-  _globals['_SPECTATORGAMESTATE']._serialized_start=237
-  _globals['_SPECTATORGAMESTATE']._serialized_end=520
-  _globals['_INITIALIZEREQUEST']._serialized_start=522
-  _globals['_INITIALIZEREQUEST']._serialized_end=603
-  _globals['_INITIALIZERESPONSE']._serialized_start=605
-  _globals['_INITIALIZERESPONSE']._serialized_end=646
-  _globals['_PARTICIPATEREQUEST']._serialized_start=648
-  _globals['_PARTICIPATEREQUEST']._serialized_end=689
-  _globals['_PLAYERGAMESTATE']._serialized_start=692
-  _globals['_PLAYERGAMESTATE']._serialized_end=1046
-  _globals['_PLAYERINPUT']._serialized_start=1048
-  _globals['_PLAYERINPUT']._serialized_end=1119
-  _globals['_SERVICE']._serialized_start=1122
-  _globals['_SERVICE']._serialized_end=1468
+  _globals['_SPECTATEREQUEST']._serialized_end=310
+  _globals['_SPECTATORGAMESTATE']._serialized_start=313
+  _globals['_SPECTATORGAMESTATE']._serialized_end=596
+  _globals['_INITIALIZEREQUEST']._serialized_start=598
+  _globals['_INITIALIZEREQUEST']._serialized_end=679
+  _globals['_INITIALIZERESPONSE']._serialized_start=681
+  _globals['_INITIALIZERESPONSE']._serialized_end=722
+  _globals['_PARTICIPATEREQUEST']._serialized_start=724
+  _globals['_PARTICIPATEREQUEST']._serialized_end=765
+  _globals['_PLAYERGAMESTATE']._serialized_start=768
+  _globals['_PLAYERGAMESTATE']._serialized_end=1122
+  _globals['_PLAYERINPUT']._serialized_start=1124
+  _globals['_PLAYERINPUT']._serialized_end=1195
+  _globals['_SERVICE']._serialized_start=1198
+  _globals['_SERVICE']._serialized_end=1544
 # @@protoc_insertion_point(module_scope)

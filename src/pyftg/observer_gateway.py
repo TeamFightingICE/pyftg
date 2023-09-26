@@ -1,11 +1,12 @@
 from .protoc import service_pb2, service_pb2_grpc
 from .enum.flag import Flag
+from .enum.data_flag import DataFlag
 from .struct import GameData, FrameData, ScreenData, AudioData, RoundResult
 from .observer_handler import ObserverHandler
 import grpc
 
 class ObserverGateway:
-    def __init__(self, handler: ObserverHandler, interval=1, host='127.0.0.1', port=50051):
+    def __init__(self, handler: ObserverHandler, data_flag: DataFlag, interval=1, host='127.0.0.1', port=50051):
         self.host = host
         self.port = port
         self.channel = grpc.insecure_channel(
@@ -15,9 +16,25 @@ class ObserverGateway:
         self.stub = service_pb2_grpc.ServiceStub(self.channel)
         self.handler = handler
         self.interval = interval
+        self.data_flag = data_flag
 
     def spectate_rpc(self):
-        request = service_pb2.SpectateRequest(interval=self.interval)
+        frame_data_flag = False
+        screen_data_flag = False
+        audio_data_flag = False
+
+        if self.data_flag == DataFlag.ALL:
+            frame_data_flag = True
+            screen_data_flag = True
+            audio_data_flag = True
+        elif self.data_flag == DataFlag.FRAME_DATA:
+            frame_data_flag = True
+        elif self.data_flag == DataFlag.SCREEN_DATA:
+            screen_data_flag = True
+        elif self.data_flag == DataFlag.AUDIO_DATA:
+            audio_data_flag = True
+
+        request = service_pb2.SpectateRequest(interval=self.interval, frame_data_flag=frame_data_flag, screen_data_flag=screen_data_flag, audio_data_flag=audio_data_flag)
         return self.stub.Spectate(request)
     
     def start(self):

@@ -40,15 +40,14 @@ class Collector(ObserverHandler):
         self.change_directory()
 
     def on_game_update(self, frame_data: FrameData, screen_data: ScreenData, audio_data: AudioData):
-        if frame_data.current_frame_number % 60 == 0:
-            logging.info('round number: %s', frame_data.current_frame_number)
+        logging.info('round number: %s', frame_data.current_frame_number)
 
-            img = np.reshape(bytearray(screen_data.display_bytes), (640, 960, 3))
-            img = np.flipud(img)
-            img = Image.fromarray(np.uint8(img))
-            img.save('{}/images/{:04d}.png'.format(self.path, frame_data.current_frame_number))
+        img = np.reshape(bytearray(screen_data.display_bytes), (640, 960, 3))
+        img = np.flipud(img)
+        img = Image.fromarray(np.uint8(img))
+        img.save('{}/images/{:04d}.png'.format(self.path, frame_data.current_frame_number))
 
-            self.frames.append(todict(frame_data))
+        self.frames.append(todict(frame_data))
 
     def on_round_end(self, round_result: RoundResult, is_game_end: bool):
         logging.info('round end: %s', round_result.elapsed_frame)
