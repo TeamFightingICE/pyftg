@@ -14,10 +14,7 @@ class Handler(ObserverHandler):
         logging.info('initialize')
     
     def on_game_update(self, frame: FrameData, screen: ScreenData, audio: AudioData):
-        compressed_display_bytes = io.BytesIO(screen.display_bytes)
-        with gzip.GzipFile(fileobj=compressed_display_bytes, mode='rb') as file:
-            decompressed_display_bytes = file.read()
-        img = np.reshape(bytearray(decompressed_display_bytes), (640, 960, 3))
+        img = np.reshape(bytearray(screen.display_bytes), (640, 960, 3))
         img = np.flipud(img)
         cv2.imshow('OpenCV', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
         cv2.waitKey(1)

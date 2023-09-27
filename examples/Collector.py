@@ -45,11 +45,7 @@ class Collector(ObserverHandler):
     def on_game_update(self, frame_data: FrameData, screen_data: ScreenData, audio_data: AudioData):
         logging.info('round number: %s', frame_data.current_frame_number)
 
-        compressed_display_bytes = io.BytesIO(screen_data.display_bytes)
-        with gzip.GzipFile(fileobj=compressed_display_bytes, mode='rb') as file:
-            decompressed_display_bytes = file.read()
-
-        img = np.reshape(bytearray(decompressed_display_bytes), (640, 960, 3))
+        img = np.reshape(bytearray(screen_data.display_bytes), (640, 960, 3))
         img = np.flipud(img)
         img = Image.fromarray(img)
         img.save('{}/images/{:03d}.png'.format(self.path, self.counter))
