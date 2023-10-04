@@ -1,8 +1,6 @@
 import logging
 import argparse
-import io
 import cv2
-import gzip
 import numpy as np
 
 from pyftg import ObserverGateway, ObserverHandler
@@ -15,7 +13,6 @@ class Handler(ObserverHandler):
     
     def on_game_update(self, frame: FrameData, screen: ScreenData, audio: AudioData):
         img = np.reshape(bytearray(screen.display_bytes), (640, 960, 3))
-        img = np.flipud(img)
         cv2.imshow('OpenCV', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
         cv2.waitKey(1)
     

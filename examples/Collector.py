@@ -46,7 +46,6 @@ class Collector(ObserverHandler):
         logging.info('round number: %s', frame_data.current_frame_number)
 
         img = np.reshape(bytearray(screen_data.display_bytes), (640, 960, 3))
-        img = np.flipud(img)
         img = Image.fromarray(img)
         img.save('{}/images/{:03d}.png'.format(self.path, self.counter))
 
