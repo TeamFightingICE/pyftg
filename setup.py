@@ -5,14 +5,14 @@ with open("README.md", "r") as fh:
 
 setup(
     name="pyftg",
-    version="1.0.2",
+    version="1.1",
     author="Staciiaz",
     description="An interface for implementing python AI in DareFightingICE",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Staciiaz/pyftg",
-    python_requires=">=3.8",
-    install_requires=["grpcio"],
+    url="https://github.com/TeamFightingICE/pyftg",
+    python_requires=">=3.10",
+    install_requires=["grpcio", "grpcio-tools", "protobuf", "numpy"],
     packages=find_packages(where='src'),
     package_dir={"": "src"},
     include_package_data=True,

@@ -1,11 +1,9 @@
-from pyftg.ai_interface import AIInterface
-from pyftg.struct import *
+from pyftg import *
 
 class KickAI(AIInterface):
     def __init__(self):
         super().__init__()
-        self.blind_flag = False
-        self.frame_data: FrameData = None
+        self.blind_flag = True
 
     def name(self) -> str:
         return self.__class__.__name__
@@ -13,15 +11,17 @@ class KickAI(AIInterface):
     def is_blind(self) -> bool:
         return self.blind_flag
 
-    def input(self) -> Key:
-        return self.key
-
     def initialize(self, game_data: GameData, player_number: int):
         self.cc = CommandCenter()
         self.key = Key()
+        self.player = player_number
+
+    def input(self) -> Key:
+        return self.key
 
     def get_information(self, frame_data: FrameData, is_control: bool, non_delay_frame_data: FrameData):
         self.frame_data = frame_data
+        self.cc.set_frame_data(self.frame_data, self.player)
 
     def get_screen_data(self, screen_data: ScreenData):
         self.screen_data = screen_data

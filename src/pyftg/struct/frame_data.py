@@ -17,10 +17,13 @@ class FrameData:
             self.current_round: int = frame_data.current_round
             self.projectile_data = [AttackData(x) for x in frame_data.projectile_data]
             self.empty_flag: bool = frame_data.empty_flag
-            self.front = np.array(frame_data.front, dtype=np.bool8)
+            self.front = [bool(x) for x in frame_data.front]
 
     def is_front(self, player: bool):
         return self.front[0 if player else 1]
     
     def get_character(self, player: bool):
         return self.character_data[0 if player else 1]
+    
+    def get_projectiles_by_player(self, player: bool):
+        return [x for x in self.projectile_data if x.player_number == player]

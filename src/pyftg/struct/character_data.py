@@ -1,6 +1,6 @@
 from .attack_data import AttackData
-from .enumerate.action import Action
-from .enumerate.state import State
+from ..enum.action import Action
+from ..enum.state import State
 
 class CharacterData:
     def __init__(self, character_data):
