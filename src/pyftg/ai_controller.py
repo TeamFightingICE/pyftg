@@ -1,8 +1,7 @@
 from .aiinterface.ai_interface import AIInterface
 from .enum.flag import Flag
 from .struct import Key, FrameData, ScreenData, AudioData, GameData, RoundResult
-from .util import convert_key
-from .protoc import service_pb2, service_pb2_grpc
+from .protoc import message_pb2, service_pb2, service_pb2_grpc
 from threading import Thread
 
 class AIController(Thread):
@@ -22,7 +21,8 @@ class AIController(Thread):
         return self.stub.Participate(request)
     
     def input_rpc(self, key: Key):
-        self.stub.Input(service_pb2.PlayerInput(player_uuid=self.player_uuid, input_key=convert_key(key)))
+        grpc_key = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
+        self.stub.Input(service_pb2.PlayerInput(player_uuid=self.player_uuid, input_key=grpc_key))
     
     def run(self):
         self.initialize_rpc()
