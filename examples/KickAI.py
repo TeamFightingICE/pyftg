@@ -1,4 +1,5 @@
 from pyftg import *
+from pyftg.struct import FrameData
 
 class KickAI(AIInterface):
     def __init__(self):
@@ -16,10 +17,13 @@ class KickAI(AIInterface):
         self.key = Key()
         self.player = player_number
 
+    def get_non_delay_frame_data(self, frame_data: FrameData):
+        pass
+
     def input(self) -> Key:
         return self.key
 
-    def get_information(self, frame_data: FrameData, is_control: bool, non_delay_frame_data: FrameData):
+    def get_information(self, frame_data: FrameData, is_control: bool):
         self.frame_data = frame_data
         self.cc.set_frame_data(self.frame_data, self.player)
 

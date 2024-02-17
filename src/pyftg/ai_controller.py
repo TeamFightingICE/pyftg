@@ -32,8 +32,11 @@ class AIController(Thread):
                 self.ai.initialize(GameData(state.game_data), self.player_number)
             elif flag is Flag.PROCESSING:
                 frame_data = FrameData(None if not state.HasField("frame_data") else state.frame_data)
-                non_delay_frame_data = None if not state.HasField("non_delay_frame_data") else FrameData(state.non_delay_frame_data)
-                self.ai.get_information(frame_data, state.is_control, non_delay_frame_data)
+
+                if state.HasField("non_delay_frame_data"):
+                    self.ai.get_non_delay_frame_data(FrameData(state.non_delay_frame_data))
+
+                self.ai.get_information(frame_data, state.is_control)
 
                 if state.HasField("screen_data"):
                     self.ai.get_screen_data(ScreenData(state.screen_data))

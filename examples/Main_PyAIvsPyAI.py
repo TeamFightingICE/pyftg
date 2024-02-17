@@ -17,8 +17,7 @@ def start_game(port: int):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--log', default='INFO', type=str, choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
     parser.add_argument('--port', default=50051, type=int, help='Port used by DareFightingICE')
     args = parser.parse_args()
-    logging.basicConfig(level=args.log)
+    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
     start_game(args.port)

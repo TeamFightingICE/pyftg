@@ -10,6 +10,9 @@ class AIInterface:
     def initialize(self, game_data: GameData, player_number: bool):
         pass
 
+    def get_non_delay_frame_data(self, frame_data: FrameData):
+        pass
+
     def get_information(self, frame_data: FrameData, is_control: bool, non_delay_frame_data: FrameData):
         pass
 
