@@ -2,10 +2,7 @@ syntax = "proto3";
 import "enum.proto";
 package service;
 
-option java_multiple_files = false;
-option java_package = "protoc";
-option java_outer_classname = "MessageProto";
-option objc_class_prefix = "HLW";
+option csharp_namespace = "DareFightingICE.Grpc.Proto";
 
 message GrpcHitArea {
 	int32 left = 1;

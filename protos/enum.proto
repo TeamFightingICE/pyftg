@@ -1,10 +1,12 @@
 syntax = "proto3";
 package service;
 
-option java_multiple_files = false;
-option java_package = "protoc";
-option java_outer_classname = "EnumProto";
-option objc_class_prefix = "HLW";
+option csharp_namespace = "DareFightingICE.Grpc.Proto";
+
+enum GrpcStatusCode {
+	SUCCESS = 0;
+	FAILED = 1;
+}
 
 enum GrpcFlag {
 	EMPTY = 0;

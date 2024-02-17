@@ -1,6 +1,7 @@
 from .protoc import service_pb2, service_pb2_grpc
 from .ai_controller import AIController
 from .aiinterface import AIInterface
+from .enum.status_code import StatusCode
 import logging
 import grpc
 
@@ -36,7 +37,10 @@ class Gateway:
                 agents[i] = None
             elif agents[i] in self.registered_agents:
                 self.agents[i] = self.registered_agents[agents[i]]
-        self.stub.RunGame(service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1], player_1=agents[0], player_2=agents[1], game_number=game_number))
+        response = self.stub.RunGame(service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1], player_1=agents[0], player_2=agents[1], game_number=game_number))
+        if StatusCode(response.status_code) == StatusCode.FAILED:
+            raise Exception(response.response_message)
+
         self.start_ai()
     
     def start_ai(self):

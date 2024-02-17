@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="pyftg",
-    version="1.3",
+    version="2.0",
     author="Staciiaz",
     description="An interface for implementing python AI in DareFightingICE",
     long_description=long_description,

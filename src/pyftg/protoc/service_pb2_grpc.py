@@ -18,7 +18,7 @@ class ServiceStub(object):
         self.RunGame = channel.unary_unary(
                 '/service.Service/RunGame',
                 request_serializer=service__pb2.RunGameRequest.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                response_deserializer=service__pb2.RunGameResponse.FromString,
                 )
         self.Spectate = channel.unary_stream(
                 '/service.Service/Spectate',
@@ -81,7 +81,7 @@ def add_ServiceServicer_to_server(servicer, server):
             'RunGame': grpc.unary_unary_rpc_method_handler(
                     servicer.RunGame,
                     request_deserializer=service__pb2.RunGameRequest.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                    response_serializer=service__pb2.RunGameResponse.SerializeToString,
             ),
             'Spectate': grpc.unary_stream_rpc_method_handler(
                     servicer.Spectate,
@@ -126,7 +126,7 @@ class Service(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/service.Service/RunGame',
             service__pb2.RunGameRequest.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            service__pb2.RunGameResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

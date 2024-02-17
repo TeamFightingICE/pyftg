@@ -15,7 +15,6 @@ class AIController(Thread):
         request = service_pb2.InitializeRequest(player_number=self.player_number, player_name=self.ai.name(), is_blind=self.ai.is_blind())
         response = self.stub.Initialize(request)
         self.player_uuid: str = response.player_uuid
-        print(response.player_uuid)
 
     def participate_rpc(self):
         request = service_pb2.ParticipateRequest(player_uuid=self.player_uuid)

@@ -4,10 +4,7 @@ import "enum.proto";
 import "message.proto";
 package service;
 
-option java_multiple_files = false;
-option java_package = "protoc";
-option java_outer_classname = "ServiceProto";
-option objc_class_prefix = "HLW";
+option csharp_namespace = "DareFightingICE.Grpc.Proto";
 
 message RunGameRequest {
 	string character_1 = 1;
@@ -15,6 +12,11 @@ message RunGameRequest {
 	string player_1 = 3;
 	string player_2 = 4;
 	int32 game_number = 5;
+}
+
+message RunGameResponse {
+	GrpcStatusCode status_code = 1;
+	string response_message = 2;
 }
 
 message SpectateRequest {
@@ -64,7 +66,7 @@ message PlayerInput {
 }
 
 service Service {
-	rpc RunGame (RunGameRequest) returns (google.protobuf.Empty) {}
+	rpc RunGame (RunGameRequest) returns (RunGameResponse) {}
 	rpc Spectate (SpectateRequest) returns (stream SpectatorGameState) {}
 
 	rpc Initialize (InitializeRequest) returns (InitializeResponse) {}
