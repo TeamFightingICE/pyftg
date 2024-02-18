@@ -1,9 +1,11 @@
-from .protoc import service_pb2, service_pb2_grpc
-from .enum.flag import Flag
-from .enum.data_flag import DataFlag
-from .struct import GameData, FrameData, ScreenData, AudioData, RoundResult
-from .observer_handler import ObserverHandler
 import grpc
+
+from .enum.data_flag import DataFlag
+from .enum.flag import Flag
+from .observer_handler import ObserverHandler
+from .protoc import service_pb2, service_pb2_grpc
+from .struct import AudioData, FrameData, GameData, RoundResult, ScreenData
+
 
 class ObserverGateway:
     def __init__(self, handler: ObserverHandler, data_flag: DataFlag, interval=1, host='127.0.0.1', port=50051):

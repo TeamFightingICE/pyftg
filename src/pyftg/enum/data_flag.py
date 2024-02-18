@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class DataFlag(Enum):
     ALL = 0
     FRAME_DATA = 1

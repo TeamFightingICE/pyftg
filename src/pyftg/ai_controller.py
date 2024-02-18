@@ -1,8 +1,11 @@
+from threading import Thread
+
 from .aiinterface.ai_interface import AIInterface
 from .enum.flag import Flag
-from .struct import Key, FrameData, ScreenData, AudioData, GameData, RoundResult
 from .protoc import message_pb2, service_pb2, service_pb2_grpc
-from threading import Thread
+from .struct import (AudioData, FrameData, GameData, Key, RoundResult,
+                     ScreenData)
+
 
 class AIController(Thread):
     def __init__(self, stub: service_pb2_grpc.ServiceStub, ai: AIInterface, player_number: bool):

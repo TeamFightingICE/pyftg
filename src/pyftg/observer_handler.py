@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from .struct import GameData, FrameData, ScreenData, AudioData, RoundResult
+
+from .struct import AudioData, FrameData, GameData, RoundResult, ScreenData
+
 
 class ObserverHandler(ABC):
     @abstractmethod

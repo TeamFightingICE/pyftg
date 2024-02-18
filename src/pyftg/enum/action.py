@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Action(Enum):
     NEUTRAL = 0
     STAND = 1

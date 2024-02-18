@@ -1,5 +1,6 @@
 from .hit_area import HitArea
 
+
 class AttackData:
     def __init__(self, attack_data):
         self.setting_hit_area = HitArea(attack_data.setting_hit_area)

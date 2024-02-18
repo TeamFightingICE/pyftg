@@ -1,6 +1,7 @@
 from .attack_data import AttackData
 from .character_data import CharacterData
 
+
 class FrameData:
     def __init__(self, frame_data=None):
         if not frame_data:

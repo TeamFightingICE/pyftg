@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class State(Enum):
     STAND = 0
     CROUCH = 1

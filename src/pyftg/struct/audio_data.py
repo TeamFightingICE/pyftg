@@ -1,6 +1,9 @@
-from .fft_data import FftData
 from array import array
+
 import numpy as np
+
+from .fft_data import FftData
+
 
 class AudioData:
     def __init__(self, audio_data):

@@ -1,11 +1,18 @@
-from ..protoc import service_pb2, service_pb2_grpc
-from ..aiinterface import AIInterface
-from ..util import load_ai
-from .ai_controller import AIController
-from ..enum.status_code import StatusCode
-import logging
 import asyncio
+import logging
+
 import grpc
+
+from ..aiinterface import AIInterface
+from ..enum.status_code import StatusCode
+from ..protoc import service_pb2, service_pb2_grpc
+from .ai_controller import AIController
+
+
+def load_ai(ai_path: str) -> AIInterface:
+    path = ai_path.split('.')
+    module_name, class_name = path[0], path[int(len(path) == 2)]
+    return getattr(__import__(module_name), class_name)()
 
 class Gateway:
     def __init__(self, host='127.0.0.1', port=50051):

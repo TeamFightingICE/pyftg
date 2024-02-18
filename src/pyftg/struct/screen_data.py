@@ -1,6 +1,7 @@
 import gzip
 import io
 
+
 class ScreenData:
     def __init__(self, screen_data):
         compressed_display_bytes = io.BytesIO(screen_data.display_bytes)

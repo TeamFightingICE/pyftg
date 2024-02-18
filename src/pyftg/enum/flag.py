@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Flag(Enum):
     EMPTY = 0
     INITIALIZE = 1

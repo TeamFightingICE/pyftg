@@ -1,9 +1,12 @@
-from .protoc import service_pb2, service_pb2_grpc
+import logging
+
+import grpc
+
 from .ai_controller import AIController
 from .aiinterface import AIInterface
 from .enum.status_code import StatusCode
-import logging
-import grpc
+from .protoc import service_pb2, service_pb2_grpc
+
 
 def load_ai(ai_path: str) -> AIInterface:
     path = ai_path.split('.')
