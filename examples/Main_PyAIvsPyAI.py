@@ -1,8 +1,10 @@
-import logging
 import argparse
-from pyftg import Gateway
-from KickAI import KickAI
+import logging
+
 from DisplayInfo import DisplayInfo
+from KickAI import KickAI
+from pyftg import Gateway
+
 
 def start_game(port: int):
     gateway = Gateway(port=port)
@@ -14,6 +16,7 @@ def start_game(port: int):
     gateway.register_ai("DisplayInfo", agent2)
     gateway.run_game([character, character], ["KickAI", "DisplayInfo"], game_num)
     gateway.close()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

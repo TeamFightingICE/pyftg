@@ -1,5 +1,6 @@
-import logging
 import argparse
+import logging
+
 from pyftg import Gateway
 
 if __name__ == '__main__':

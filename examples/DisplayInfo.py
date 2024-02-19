@@ -1,4 +1,6 @@
-from pyftg import *
+from pyftg import (AIInterface, AudioData, CommandCenter, FrameData, GameData,
+                   Key, RoundResult, ScreenData)
+
 
 class DisplayInfo(AIInterface):
     def __init__(self):

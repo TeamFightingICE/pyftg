@@ -1,5 +1,6 @@
-from pyftg import *
-from pyftg.struct import FrameData
+from pyftg import (AIInterface, AudioData, CommandCenter, FrameData, GameData,
+                   Key, RoundResult, ScreenData)
+
 
 class KickAI(AIInterface):
     def __init__(self):
