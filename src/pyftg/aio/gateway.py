@@ -3,10 +3,10 @@ import logging
 
 import grpc
 
-from ..aiinterface import AIInterface
-from ..enum.status_code import StatusCode
-from ..protoc import service_pb2, service_pb2_grpc
-from .ai_controller import AIController
+from pyftg.aiinterface import AIInterface
+from pyftg.enum.status_code import StatusCode
+from pyftg.protoc import service_pb2, service_pb2_grpc
+from pyftg.aio.ai_controller import AIController
 
 
 def load_ai(ai_path: str) -> AIInterface:
@@ -23,9 +23,9 @@ class Gateway:
             compression=grpc.Compression.Gzip,
         )
         self.stub = service_pb2_grpc.ServiceStub(self.channel)
-        self.registered_agents: 'dict[str, AIInterface]' = dict()
-        self.agents: 'list[AIInterface]' = [None, None]
-        self.ais: 'list[AIController]' = [None, None]
+        self.registered_agents: dict[str, AIInterface] = dict()
+        self.agents: list[AIInterface] = [None, None]
+        self.ais: list[AIController] = [None, None]
     
     def load_agent(self, ai_names: 'list[str]'):
         for i, ai_name in enumerate(ai_names):

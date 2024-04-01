@@ -1,4 +1,4 @@
-from .hit_area import HitArea
+from pyftg.struct.hit_area import HitArea
 
 
 class AttackData:

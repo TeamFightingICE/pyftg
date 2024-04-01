@@ -1,10 +1,11 @@
 import grpc
 
-from .enum.data_flag import DataFlag
-from .enum.flag import Flag
-from .observer_handler import ObserverHandler
-from .protoc import service_pb2, service_pb2_grpc
-from .struct import AudioData, FrameData, GameData, RoundResult, ScreenData
+from pyftg.enum.data_flag import DataFlag
+from pyftg.enum.flag import Flag
+from pyftg.observer_handler import ObserverHandler
+from pyftg.protoc import service_pb2, service_pb2_grpc
+from pyftg.struct import (AudioData, FrameData, GameData, RoundResult,
+                          ScreenData)
 
 
 class ObserverGateway:

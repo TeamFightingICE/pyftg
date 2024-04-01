@@ -1,5 +1,5 @@
-from .attack_data import AttackData
-from .character_data import CharacterData
+from pyftg.struct.attack_data import AttackData
+from pyftg.struct.character_data import CharacterData
 
 
 class FrameData:

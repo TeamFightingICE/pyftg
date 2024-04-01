@@ -2,7 +2,7 @@ from array import array
 
 import numpy as np
 
-from .fft_data import FftData
+from pyftg.struct.fft_data import FftData
 
 
 class AudioData:

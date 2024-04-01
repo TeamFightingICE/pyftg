@@ -1,5 +1,5 @@
-from ..struct.frame_data import FrameData
-from ..struct.key import Key
+from pyftg.struct.frame_data import FrameData
+from pyftg.struct.key import Key
 
 
 class CommandCenter:

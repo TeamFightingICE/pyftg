@@ -1,10 +1,10 @@
 from threading import Thread
 
-from .aiinterface.ai_interface import AIInterface
-from .enum.flag import Flag
-from .protoc import message_pb2, service_pb2, service_pb2_grpc
-from .struct import (AudioData, FrameData, GameData, Key, RoundResult,
-                     ScreenData)
+from pyftg.aiinterface.ai_interface import AIInterface
+from pyftg.enum.flag import Flag
+from pyftg.protoc import message_pb2, service_pb2, service_pb2_grpc
+from pyftg.struct import (AudioData, FrameData, GameData, Key, RoundResult,
+                          ScreenData)
 
 
 class AIController(Thread):

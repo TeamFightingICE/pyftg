@@ -1,5 +1,5 @@
-from ..struct import (AudioData, FrameData, GameData, Key, RoundResult,
-                      ScreenData)
+from pyftg.struct import (AudioData, FrameData, GameData, Key, RoundResult,
+                          ScreenData)
 
 
 class AIInterface:

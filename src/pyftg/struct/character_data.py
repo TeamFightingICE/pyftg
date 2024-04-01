@@ -1,6 +1,6 @@
-from ..enum.action import Action
-from ..enum.state import State
-from .attack_data import AttackData
+from pyftg.enum.action import Action
+from pyftg.enum.state import State
+from pyftg.struct.attack_data import AttackData
 
 
 class CharacterData:

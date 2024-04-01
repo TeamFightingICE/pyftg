@@ -1,3 +1,3 @@
-from .action import Action
-from .state import State
-from .data_flag import DataFlag
+from pyftg.enum.action import Action
+from pyftg.enum.state import State
+from pyftg.enum.data_flag import DataFlag

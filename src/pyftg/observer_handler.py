@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from .struct import AudioData, FrameData, GameData, RoundResult, ScreenData
+from pyftg.struct import (AudioData, FrameData, GameData, RoundResult,
+                          ScreenData)
 
 
 class ObserverHandler(ABC):

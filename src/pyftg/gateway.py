@@ -2,10 +2,10 @@ import logging
 
 import grpc
 
-from .ai_controller import AIController
-from .aiinterface import AIInterface
-from .enum.status_code import StatusCode
-from .protoc import service_pb2, service_pb2_grpc
+from pyftg.ai_controller import AIController
+from pyftg.aiinterface import AIInterface
+from pyftg.enum.status_code import StatusCode
+from pyftg.protoc import service_pb2, service_pb2_grpc
 
 
 def load_ai(ai_path: str) -> AIInterface:
