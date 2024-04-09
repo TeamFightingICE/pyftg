@@ -1,6 +1,6 @@
 [project]
 name = "pyftg"
-version = "2.0.1"
+version = "2.1"
 authors = [
   { name="TeamFightingICE" },
 ]
@@ -13,10 +13,10 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
-  'grpcio',
-  'grpcio-tools',
-  'protobuf',
-  'numpy',
+  'grpcio ~= 1.62.1',
+  'grpcio-tools ~= 1.62.1',
+  'protobuf ~= 4.25.3',
+  'numpy ~= 1.26.4',
 ]
 
 [project.urls]
