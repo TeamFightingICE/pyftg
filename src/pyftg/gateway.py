@@ -4,14 +4,12 @@ import grpc
 
 from pyftg.ai_controller import AIController
 from pyftg.aiinterface import AIInterface
-from pyftg.enum.status_code import StatusCode
+from pyftg.models.enums.status_code import StatusCode
 from pyftg.protoc import service_pb2, service_pb2_grpc
+from pyftg.utils.ai import load_ai
 
+logger = logging.getLogger(__name__)
 
-def load_ai(ai_path: str) -> AIInterface:
-    path = ai_path.split('.')
-    module_name, class_name = path[0], path[int(len(path) == 2)]
-    return getattr(__import__(module_name), class_name)()
 
 class Gateway:
     def __init__(self, host='127.0.0.1', port=50051):
@@ -22,11 +20,13 @@ class Gateway:
             compression=grpc.Compression.Gzip,
         )
         self.stub = service_pb2_grpc.ServiceStub(self.channel)
-        self.registered_agents: 'dict[str, AIInterface]' = dict()
-        self.agents: 'list[AIInterface]' = [None, None]
-        self.ais: 'list[AIController]' = [None, None]
+        self.registered_agents: dict[str, AIInterface] = dict()
+        self.agents: list[AIInterface] = [None, None]
+        self.ais: list[AIController] = [None, None]
     
-    def load_agent(self, ai_names: 'list[str]'):
+    def load_agent(self, ai_names: list[str]):
+        if ai_names[0] is None and ai_names[1] is None:
+            raise Exception("At least one agent must be specified.")
         for i, ai_name in enumerate(ai_names):
             if ai_name:
                 self.agents[i] = load_ai(ai_name)
@@ -34,7 +34,7 @@ class Gateway:
     def register_ai(self, name: str, agent: AIInterface):
         self.registered_agents[name] = agent
 
-    def run_game(self, characters: 'list[str]', agents: 'list[str]', game_number: int):
+    def run_game(self, characters: list[str], agents: list[str], game_number: int):
         for i in range(2):
             if agents[i] == 'Sandbox':
                 agents[i] = None
@@ -51,7 +51,7 @@ class Gateway:
             if agent:
                 self.ais[i] = AIController(self.stub, agent, i == 0)
                 self.ais[i].start()
-                logging.info(f"AI controller for P{i+1} ({agent.name()}) is ready.")
+                logger.info(f"AI controller for P{i+1} ({agent.name()}) is ready.")
         return [x.join() for x in self.ais if x]
     
     def close(self):

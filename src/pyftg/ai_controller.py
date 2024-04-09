@@ -1,10 +1,14 @@
 from threading import Thread
 
 from pyftg.aiinterface.ai_interface import AIInterface
-from pyftg.enum.flag import Flag
+from pyftg.models.audio_data import AudioData
+from pyftg.models.enums.flag import Flag
+from pyftg.models.frame_data import FrameData
+from pyftg.models.game_data import GameData
+from pyftg.models.key import Key
+from pyftg.models.round_result import RoundResult
+from pyftg.models.screen_data import ScreenData
 from pyftg.protoc import message_pb2, service_pb2, service_pb2_grpc
-from pyftg.struct import (AudioData, FrameData, GameData, Key, RoundResult,
-                          ScreenData)
 
 
 class AIController(Thread):
@@ -32,25 +36,23 @@ class AIController(Thread):
         for state in self.participate_rpc():
             flag = Flag(state.state_flag)
             if flag is Flag.INITIALIZE:
-                self.ai.initialize(GameData(state.game_data), self.player_number)
+                self.ai.initialize(GameData.from_proto(state.game_data), self.player_number)
             elif flag is Flag.PROCESSING:
-                frame_data = FrameData(None if not state.HasField("frame_data") else state.frame_data)
-
                 if state.HasField("non_delay_frame_data"):
-                    self.ai.get_non_delay_frame_data(FrameData(state.non_delay_frame_data))
+                    self.ai.get_non_delay_frame_data(FrameData.from_proto(state.non_delay_frame_data))
 
-                self.ai.get_information(frame_data, state.is_control)
+                self.ai.get_information(FrameData.from_proto(state.frame_data), state.is_control)
 
                 if state.HasField("screen_data"):
-                    self.ai.get_screen_data(ScreenData(state.screen_data))
+                    self.ai.get_screen_data(ScreenData.from_proto(state.screen_data))
 
                 if state.HasField("audio_data"):
-                    self.ai.get_audio_data(AudioData(state.audio_data))
+                    self.ai.get_audio_data(AudioData.from_proto(state.audio_data))
                     
                 self.ai.processing()
                 self.input_rpc(self.ai.input())
             elif flag is Flag.ROUND_END:
-                self.ai.round_end(RoundResult(state.round_result))
+                self.ai.round_end(RoundResult.from_proto(state.round_result))
             elif flag is Flag.GAME_END:
-                self.ai.round_end(RoundResult(state.round_result))
+                self.ai.round_end(RoundResult.from_proto(state.round_result))
                 self.ai.game_end()

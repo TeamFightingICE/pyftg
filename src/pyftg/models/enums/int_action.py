@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Action(Enum):
+class IntAction(int, Enum):
     NEUTRAL = 0
     STAND = 1
     FORWARD_WALK = 2

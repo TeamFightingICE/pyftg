@@ -1,12 +1,12 @@
-from pyftg.struct.frame_data import FrameData
-from pyftg.struct.key import Key
+from pyftg.models.frame_data import FrameData
+from pyftg.models.key import Key
 
 
 class CommandCenter:
     def __init__(self):
-        self.skill_key: 'list[Key]' = []
-        self.frame_data = FrameData()
-        self.player_number = True
+        self.skill_key: list[Key] = []
+        self.frame_data: FrameData = None
+        self.player_number = False
 
     def command_call(self, str):
         if not self.skill_key:
@@ -152,7 +152,7 @@ class CommandCenter:
         else:
             return Key()
 
-    def get_skill_keys(self) -> 'list[Key]':
+    def get_skill_keys(self) -> list[Key]:
         return self.skill_key
 
     def skill_cancel(self):
@@ -161,7 +161,7 @@ class CommandCenter:
     def is_player_number(self) -> bool:
         return self.player_number
 
-    def reverse_key(self, commands: 'list[str]'):
+    def reverse_key(self, commands: list[str]):
         buffer = [0]*len(commands)
         for i in range(len(commands)):
             if commands[i] == "L" or commands[i] == "4":

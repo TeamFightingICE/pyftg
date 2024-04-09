@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class State(Enum):
+class IntState(int, Enum):
     STAND = 0
     CROUCH = 1
     AIR = 2

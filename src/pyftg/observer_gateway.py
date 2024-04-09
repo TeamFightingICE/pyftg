@@ -1,11 +1,14 @@
 import grpc
 
-from pyftg.enum.data_flag import DataFlag
-from pyftg.enum.flag import Flag
+from pyftg.models.audio_data import AudioData
+from pyftg.models.enums.data_flag import DataFlag
+from pyftg.models.enums.flag import Flag
+from pyftg.models.frame_data import FrameData
+from pyftg.models.game_data import GameData
+from pyftg.models.round_result import RoundResult
+from pyftg.models.screen_data import ScreenData
 from pyftg.observer_handler import ObserverHandler
 from pyftg.protoc import service_pb2, service_pb2_grpc
-from pyftg.struct import (AudioData, FrameData, GameData, RoundResult,
-                          ScreenData)
 
 
 class ObserverGateway:
@@ -44,13 +47,14 @@ class ObserverGateway:
         for state in self.spectate_rpc():
             flag = Flag(state.state_flag)
             if flag is Flag.INITIALIZE:
-                self.handler.on_initialize(GameData(state.game_data))
+                self.handler.on_initialize(GameData.from_proto(state.game_data))
             elif flag is Flag.PROCESSING:
-                self.handler.on_game_update(FrameData(state.frame_data), ScreenData(state.screen_data), AudioData(state.audio_data))
+                self.handler.on_game_update(FrameData.from_proto(state.frame_data), ScreenData.from_proto(state.screen_data), 
+                                            AudioData.from_proto(state.audio_data))
             elif flag is Flag.ROUND_END:
-                self.handler.on_round_end(RoundResult(state.round_result), False)
+                self.handler.on_round_end(RoundResult.from_proto(state.round_result), False)
             elif flag is Flag.GAME_END:
-                self.handler.on_round_end(RoundResult(state.round_result), True)
+                self.handler.on_round_end(RoundResult.from_proto(state.round_result), True)
     
     def close(self):
         self.channel.close()
