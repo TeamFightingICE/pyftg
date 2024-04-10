@@ -7,8 +7,8 @@ from pyftg.models.frame_data import FrameData
 from pyftg.models.game_data import GameData
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
-from pyftg.observer_handler import ObserverHandler
 from pyftg.protoc import service_pb2, service_pb2_grpc
+from pyftg.threading.observer_handler import ObserverHandler
 
 
 class ObserverGateway:

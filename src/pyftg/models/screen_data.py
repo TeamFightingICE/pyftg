@@ -1,8 +1,7 @@
 from base64 import b64decode, b64encode
 from contextlib import closing
 from dataclasses import dataclass
-from gzip import GzipFile
-from io import BytesIO
+from pyftg.utils.gzip import gzip_decompress
 
 from google.protobuf.message import Message
 
@@ -23,16 +22,21 @@ class ScreenData(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data_obj: dict):
+    def from_dict(cls, data_obj: dict, decompress=False):
+        display_bytestring: str = data_obj["display_bytestring"]
+        if decompress:
+            display_bytes = gzip_decompress(b64decode(data_obj["display_bytestring"]))
+            display_bytestring = b64encode(display_bytes).decode('utf-8')
+
         return ScreenData(
-            display_bytestring=data_obj["display_bytestring"]
+            display_bytestring=display_bytestring
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: Message):
-        compressed_display_bytes = BytesIO(proto_obj.display_bytes)
-        with closing(GzipFile(fileobj=compressed_display_bytes, mode='rb')) as file:
-            display_bytes = file.read()
+    def from_proto(cls, proto_obj: Message, decompress=True):
+        display_bytes: bytes = proto_obj.display_as_bytes
+        if decompress:
+            display_bytes = gzip_decompress(display_bytes)
 
         return ScreenData(
             display_bytestring=b64encode(display_bytes).decode('utf-8')

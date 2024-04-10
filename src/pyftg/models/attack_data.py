@@ -59,6 +59,9 @@ class AttackData(BaseModel):
 
     @classmethod
     def from_dict(cls, data_obj: dict):
+        if not data_obj:
+            return cls.get_default_instance()
+
         return AttackData(
             setting_hit_area=HitArea.from_dict(data_obj["setting_hit_area"]),
             setting_speed_x=data_obj["setting_speed_x"],
