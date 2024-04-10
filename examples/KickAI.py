@@ -1,5 +1,15 @@
-from pyftg import (AIInterface, AudioData, CommandCenter, FrameData, GameData,
-                   Key, RoundResult, ScreenData)
+import logging
+
+from pyftg.aiinterface.ai_interface import AIInterface
+from pyftg.aiinterface.command_center import CommandCenter
+from pyftg.models.audio_data import AudioData
+from pyftg.models.frame_data import FrameData
+from pyftg.models.game_data import GameData
+from pyftg.models.key import Key
+from pyftg.models.round_result import RoundResult
+from pyftg.models.screen_data import ScreenData
+
+logger = logging.getLogger(__name__)
 
 
 class KickAI(AIInterface):
@@ -14,6 +24,7 @@ class KickAI(AIInterface):
         return self.blind_flag
 
     def initialize(self, game_data: GameData, player_number: int):
+        logger.info("initialize")
         self.cc = CommandCenter()
         self.key = Key()
         self.player = player_number
@@ -47,7 +58,7 @@ class KickAI(AIInterface):
             self.cc.command_call("B")
     
     def round_end(self, round_result: RoundResult):
-        print(round_result.remaining_hps[0], round_result.remaining_hps[1], round_result.elapsed_frame)
+        logger.info(f"round end: {round_result}")
 
     def game_end(self):
-        print('game end')
+        logger.info("game end")

@@ -1,5 +1,15 @@
-from pyftg import (AIInterface, AudioData, CommandCenter, FrameData, GameData,
-                   Key, RoundResult, ScreenData)
+import logging
+
+from pyftg.aiinterface.ai_interface import AIInterface
+from pyftg.aiinterface.command_center import CommandCenter
+from pyftg.models.audio_data import AudioData
+from pyftg.models.frame_data import FrameData
+from pyftg.models.game_data import GameData
+from pyftg.models.key import Key
+from pyftg.models.round_result import RoundResult
+from pyftg.models.screen_data import ScreenData
+
+logger = logging.getLogger(__name__)
 
 
 class DisplayInfo(AIInterface):
@@ -15,6 +25,7 @@ class DisplayInfo(AIInterface):
         return self.blind_flag
 
     def initialize(self, game_data: GameData, player: bool):
+        logger.info("initialize")
         self.input_key = Key()
         self.cc = CommandCenter()
         self.player = player
@@ -47,7 +58,7 @@ class DisplayInfo(AIInterface):
         self.cc.skill_cancel()
 
         # calcultate the distance
-        distance = self.calculate_distance(self.screen_data.display_bytes)
+        distance = self.calculate_distance(self.screen_data.display_as_bytes)
         if distance == -1:
             self.cc.command_call("STAND_A") # default action
         else:
@@ -81,9 +92,7 @@ class DisplayInfo(AIInterface):
         return -1
 
     def round_end(self, round_result: RoundResult):
-        print(round_result.remaining_hps[0])
-        print(round_result.remaining_hps[1])
-        print(round_result.elapsed_frame)
+        logger.info(f"round end: {round_result}")
     
     def game_end(self):
-        pass
+        logger.info("game end")
