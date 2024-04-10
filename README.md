@@ -2,8 +2,6 @@
 
 An interface for implementing python AI in DareFightingICE
 
-**Note:** Version 2.0 is the latest version compatible with the legacy [FightingICE](https://github.com/TeamFightingICE/FightingICE). Future versions will only support [DareFightingICE-Unity](https://github.com/TeamFightingICE/DareFightingICE-Unity).
-
 First, install `pyftg` with pip.
 ```
 pip install pyftg
