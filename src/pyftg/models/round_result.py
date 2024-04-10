@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-
-from typing_extensions import List
+from typing import List
 
 from pyftg.models.base_model import BaseModel
 

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Flag(Enum):
+class Flag(int, Enum):
     EMPTY = 0
     INITIALIZE = 1
     PROCESSING = 2

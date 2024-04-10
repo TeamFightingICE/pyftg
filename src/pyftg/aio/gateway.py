@@ -7,7 +7,7 @@ from pyftg.aiinterface import AIInterface
 from pyftg.aio.ai_controller import AIController
 from pyftg.models.enums.status_code import StatusCode
 from pyftg.protoc import service_pb2, service_pb2_grpc
-from pyftg.utils.ai import load_ai
+from pyftg.utils.resource_loader import load_ai
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,8 @@ class Gateway:
                 agents[i] = None
             elif agents[i] in self.registered_agents:
                 self.agents[i] = self.registered_agents[agents[i]]
-        response = await self.stub.RunGame(service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1], player_1=agents[0], player_2=agents[1], game_number=game_number))
+        response = await self.stub.RunGame(service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1], 
+                                                                      player_1=agents[0], player_2=agents[1], game_number=game_number))
         if StatusCode(response.status_code) == StatusCode.FAILED:
             raise Exception(response.response_message)
         await self.start_ai()

@@ -1,4 +1,6 @@
+import logging
 from threading import Thread
+from typing import Generator
 
 from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.models.audio_data import AudioData
@@ -9,6 +11,9 @@ from pyftg.models.key import Key
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
 from pyftg.protoc import message_pb2, service_pb2, service_pb2_grpc
+from pyftg.types.grpc import PlayerGameState
+
+logger = logging.getLogger(__name__)
 
 
 class AIController(Thread):
@@ -18,22 +23,23 @@ class AIController(Thread):
         self.ai = ai
         self.player_number = player_number
     
-    def initialize_rpc(self):
+    def initialize_rpc(self) -> str:
         request = service_pb2.InitializeRequest(player_number=self.player_number, player_name=self.ai.name(), is_blind=self.ai.is_blind())
         response = self.stub.Initialize(request)
-        self.player_uuid: str = response.player_uuid
+        return response.player_uuid
 
-    def participate_rpc(self):
-        request = service_pb2.ParticipateRequest(player_uuid=self.player_uuid)
+    def participate_rpc(self, player_uuid: str) -> Generator[PlayerGameState, None, None]:
+        request = service_pb2.ParticipateRequest(player_uuid=player_uuid)
         return self.stub.Participate(request)
     
-    def input_rpc(self, key: Key):
+    def input_rpc(self, player_uuid: str, key: Key) -> int:
         grpc_key = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
-        self.stub.Input(service_pb2.PlayerInput(player_uuid=self.player_uuid, input_key=grpc_key))
+        self.stub.Input(service_pb2.PlayerInput(player_uuid=player_uuid, input_key=grpc_key))
+        return 0
     
     def run(self):
-        self.initialize_rpc()
-        for state in self.participate_rpc():
+        player_uuid = self.initialize_rpc()
+        for state in self.participate_rpc(player_uuid):
             flag = Flag(state.state_flag)
             if flag is Flag.INITIALIZE:
                 self.ai.initialize(GameData.from_proto(state.game_data), self.player_number)
@@ -50,7 +56,7 @@ class AIController(Thread):
                     self.ai.get_audio_data(AudioData.from_proto(state.audio_data))
                     
                 self.ai.processing()
-                self.input_rpc(self.ai.input())
+                self.input_rpc(player_uuid, self.ai.input())
             elif flag is Flag.ROUND_END:
                 self.ai.round_end(RoundResult.from_proto(state.round_result))
             elif flag is Flag.GAME_END:

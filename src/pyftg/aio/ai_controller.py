@@ -1,3 +1,6 @@
+import logging
+from typing import AsyncGenerator
+
 from pyftg.aiinterface import AIInterface
 from pyftg.models.audio_data import AudioData
 from pyftg.models.enums.flag import Flag
@@ -7,6 +10,9 @@ from pyftg.models.key import Key
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
 from pyftg.protoc import message_pb2, service_pb2, service_pb2_grpc
+from pyftg.types.grpc import PlayerGameState
+
+logger = logging.getLogger(__name__)
 
 
 class AIController():
@@ -15,22 +21,24 @@ class AIController():
         self.ai = ai
         self.player_number = player_number
     
-    async def initialize_rpc(self):
+    async def initialize_rpc(self) -> str:
         request = service_pb2.InitializeRequest(player_number=self.player_number, player_name=self.ai.name(), is_blind=self.ai.is_blind())
         response = await self.stub.Initialize(request)
-        self.player_uuid: str = response.player_uuid
+        return response.player_uuid
 
-    async def participate_rpc(self):
-        request = service_pb2.ParticipateRequest(player_uuid=self.player_uuid)
+    async def participate_rpc(self, player_uuid: str) -> AsyncGenerator[PlayerGameState, None]:
+        request = service_pb2.ParticipateRequest(player_uuid=player_uuid)
         return self.stub.Participate(request)
     
-    async def input_rpc(self, key: Key):
+    async def input_rpc(self, player_uuid: str, key: Key) -> int:
         grpc_key = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
-        await self.stub.Input(service_pb2.PlayerInput(player_uuid=self.player_uuid, input_key=grpc_key))
+        await self.stub.Input(service_pb2.PlayerInput(player_uuid=player_uuid, input_key=grpc_key))
+        return 0
     
     async def run(self):
-        await self.initialize_rpc()
-        async for state in await self.participate_rpc():
+        player_uuid = await self.initialize_rpc()
+        grpc_stream_call = await self.participate_rpc(player_uuid)
+        async for state in grpc_stream_call:
             flag = Flag(state.state_flag)
             if flag is Flag.INITIALIZE:
                 self.ai.initialize(GameData.from_proto(state.game_data), self.player_number)
@@ -47,7 +55,7 @@ class AIController():
                     self.ai.get_audio_data(AudioData.from_proto(state.audio_data))
                     
                 self.ai.processing()
-                await self.input_rpc(self.ai.input())
+                await self.input_rpc(player_uuid, self.ai.input())
             elif flag is Flag.ROUND_END:
                 self.ai.round_end(RoundResult.from_proto(state.round_result))
             elif flag is Flag.GAME_END:

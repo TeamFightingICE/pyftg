@@ -6,7 +6,7 @@ from pyftg.ai_controller import AIController
 from pyftg.aiinterface import AIInterface
 from pyftg.models.enums.status_code import StatusCode
 from pyftg.protoc import service_pb2, service_pb2_grpc
-from pyftg.utils.ai import load_ai
+from pyftg.utils.resource_loader import load_ai
 
 logger = logging.getLogger(__name__)
 
