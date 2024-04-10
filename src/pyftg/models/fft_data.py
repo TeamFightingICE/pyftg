@@ -1,6 +1,8 @@
 from base64 import b64decode, b64encode
 from dataclasses import dataclass
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 
 
@@ -31,7 +33,7 @@ class FFTData(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return FFTData(
             real_data_bytestring=b64encode(proto_obj.real_data_as_bytes).decode('utf-8'),
             imaginary_data_bytestring=b64encode(proto_obj.imaginary_data_as_bytes).decode('utf-8')

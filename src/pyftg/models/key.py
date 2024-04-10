@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 
 
@@ -46,7 +48,7 @@ class Key(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return Key(
             A=proto_obj.A,
             B=proto_obj.B,

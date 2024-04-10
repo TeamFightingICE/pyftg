@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from google.protobuf.message import Message
+
 from pyftg.models.attack_data import AttackData
 from pyftg.models.base_model import BaseModel
 from pyftg.models.enums.action import Action
@@ -88,7 +90,7 @@ class CharacterData(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return CharacterData(
             player_number=proto_obj.player_number,
             hp=proto_obj.hp,

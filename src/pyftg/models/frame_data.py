@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
+from google.protobuf.message import Message
+
 from pyftg.models.attack_data import AttackData
 from pyftg.models.base_model import BaseModel
 from pyftg.models.character_data import CharacterData
@@ -50,7 +52,7 @@ class FrameData(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return FrameData(
             character_data=list(map(CharacterData.from_proto, proto_obj.character_data)),
             current_frame_number=proto_obj.current_frame_number,

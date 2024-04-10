@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from gzip import GzipFile
 from io import BytesIO
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 
 
@@ -27,7 +29,7 @@ class ScreenData(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         compressed_display_bytes = BytesIO(proto_obj.display_bytes)
         with closing(GzipFile(fileobj=compressed_display_bytes, mode='rb')) as file:
             display_bytes = file.read()

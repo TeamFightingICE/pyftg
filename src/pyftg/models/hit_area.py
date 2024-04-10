@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 
 
@@ -28,7 +30,7 @@ class HitArea(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return HitArea(
             left=proto_obj.left,
             right=proto_obj.right,

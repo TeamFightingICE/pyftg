@@ -1,10 +1,12 @@
+from typing import NewType
+
 from google.protobuf.message import Message
 
-GrpcFrameData = object
-GrpcScreenData = object
-GrpcAudioData = object
-GrpcGameData = object
-GrpcRoundResult = object
+GrpcFrameData = NewType('GrpcFrameData', Message)
+GrpcScreenData = NewType('GrpcScreenData', Message)
+GrpcAudioData = NewType('GrpcAudioData', Message)
+GrpcGameData = NewType('GrpcGameData', Message)
+GrpcRoundResult = NewType('GrpcRoundResult', Message)
 
 
 class PlayerGameState(Message):

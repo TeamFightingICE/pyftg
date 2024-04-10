@@ -2,6 +2,8 @@ from base64 import b64decode, b64encode
 from dataclasses import dataclass
 from typing import List
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 from pyftg.models.fft_data import FFTData
 
@@ -36,7 +38,7 @@ class AudioData(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return AudioData(
             raw_data_bytestring=b64encode(proto_obj.raw_data_as_bytes).decode('utf-8'),
             fft_data=list(map(FFTData.from_proto, proto_obj.fft_data)),

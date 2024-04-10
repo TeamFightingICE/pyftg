@@ -1,7 +1,7 @@
 import logging
 from typing import AsyncGenerator
 
-from pyftg.aiinterface import AIInterface
+from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.models.audio_data import AudioData
 from pyftg.models.enums.flag import Flag
 from pyftg.models.frame_data import FrameData

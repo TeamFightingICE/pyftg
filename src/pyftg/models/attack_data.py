@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 from pyftg.models.hit_area import HitArea
 
@@ -83,7 +85,7 @@ class AttackData(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return AttackData(
             setting_hit_area=HitArea.from_proto(proto_obj.setting_hit_area),
             setting_speed_x=proto_obj.setting_speed_x,

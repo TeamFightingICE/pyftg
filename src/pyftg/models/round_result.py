@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
+from google.protobuf.message import Message
+
 from pyftg.models.base_model import BaseModel
 
 
@@ -26,7 +28,7 @@ class RoundResult(BaseModel):
         )
     
     @classmethod
-    def from_proto(cls, proto_obj: object):
+    def from_proto(cls, proto_obj: Message):
         return RoundResult(
             current_round=proto_obj.current_round,
             remaining_hps=list(map(int, proto_obj.remaining_hps)),
