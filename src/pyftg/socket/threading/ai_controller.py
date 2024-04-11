@@ -30,17 +30,22 @@ class AIController(Thread):
     
     def initialize_socket(self) -> str:
         # Send player number (b'\x00' is player 1, b'\x01' is player 2)
-        self.client.send((not self.player_number).to_bytes(1, byteorder='little', signed=False))
+        self.client.send(self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
+        self.client.send(self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
 
-    def recv_data(self) -> bytes:
-        header_data = self.client.recv(4)
-        buffer_size = int.from_bytes(header_data, byteorder='little')
-        body_data = self.client.recv(buffer_size)
+    def recv_data(self, n: int = -1) -> bytes:
+        if n == -1:
+            header_data = self.client.recv(4)
+            n = int.from_bytes(header_data, byteorder='little')
+            if n == 0:
+                return None
+        body_data = self.client.recv(n)
         return body_data
     
-    def send_data(self, data: bytes):
-        buffer_size = len(data).to_bytes(4, byteorder='little')
-        self.client.send(buffer_size)
+    def send_data(self, data: bytes, with_header: bool = True):
+        if with_header:
+            buffer_size = len(data).to_bytes(4, byteorder='little')
+            self.client.send(buffer_size)
         self.client.send(data)
 
     def on_initialize(self):
@@ -50,13 +55,17 @@ class AIController(Thread):
 
     def on_processing(self):
         is_control = bool(self.client.recv(1))
-        frame_data = FrameData.from_dict(orjson.loads(self.recv_data()))
-        audio_data = AudioData.from_dict(orjson.loads(self.recv_data()))
-        screen_data = ScreenData.from_dict(orjson.loads(self.recv_data()), decompress=True)
 
-        self.ai.get_information(frame_data, is_control)
-        self.ai.get_screen_data(screen_data)
-        self.ai.get_audio_data(audio_data)
+        non_delay_frame_data_packet = self.recv_data()
+        if non_delay_frame_data_packet:
+            self.ai.get_non_delay_frame_data(FrameData.from_dict(orjson.loads(non_delay_frame_data_packet)))
+
+        self.ai.get_information(FrameData.from_dict(orjson.loads(self.recv_data())), is_control)
+        self.ai.get_audio_data(AudioData.from_dict(orjson.loads(self.recv_data())))
+
+        screen_data_packet = self.recv_data()
+        if screen_data_packet:
+            self.ai.get_screen_data(ScreenData.from_dict(orjson.loads(screen_data_packet), decompress=True))
 
         self.ai.processing()
         self.send_data(self.ai.input().to_json())
