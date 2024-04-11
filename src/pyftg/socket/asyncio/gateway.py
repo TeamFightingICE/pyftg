@@ -4,6 +4,7 @@ import logging
 import orjson
 
 from pyftg.aiinterface.ai_interface import AIInterface
+from pyftg.interfaces.async_gateway import IAsyncGateway
 from pyftg.models.enums.status_code import StatusCode
 from pyftg.socket.asyncio.ai_controller import AIController
 from pyftg.socket.models.run_game_request import RunGameRequest
@@ -13,8 +14,8 @@ from pyftg.utils.resource_loader import load_ai
 logger = logging.getLogger(__name__)
 
 
-class Gateway:
-    def __init__(self, host='127.0.0.1', port=11111):
+class Gateway(IAsyncGateway):
+    def __init__(self, host='127.0.0.1', port=50051):
         self.host = host
         self.port = port
         self.registered_agents: dict[str, AIInterface] = dict()

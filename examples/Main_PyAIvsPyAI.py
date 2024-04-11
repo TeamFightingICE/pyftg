@@ -5,14 +5,14 @@ from typing_extensions import Annotated, Optional
 
 from DisplayInfo import DisplayInfo
 from KickAI import KickAI
-from pyftg.grpc.asyncio.gateway import Gateway
+from pyftg.utils.gateway import get_async_gateway
 from pyftg.utils.logging import DEBUG, set_logging
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
 
-async def start_process(character: str = "ZEN", game_num: int = 1, port: int = 50051):
-    gateway = Gateway(port=port)
+async def start_process(host: str, port: int, use_socket: bool, character: str = "ZEN", game_num: int = 1):
+    gateway = get_async_gateway(host, port, use_socket)
     agent1 = KickAI()
     agent2 = DisplayInfo()
     gateway.register_ai("KickAI", agent1)
@@ -23,8 +23,10 @@ async def start_process(character: str = "ZEN", game_num: int = 1, port: int = 5
 
 @app.command()
 def main(
-        port: Annotated[Optional[int], typer.Option(help="Port used by DareFightingICE")] = 50051):
-    asyncio.run(start_process(port=port))
+        host: Annotated[Optional[str], typer.Option(help="Host used by DareFightingICE")] = "127.0.0.1",
+        port: Annotated[Optional[int], typer.Option(help="Port used by DareFightingICE")] = 50051,
+        use_socket: Annotated[Optional[bool], typer.Option(help="Use socket instead of gRPC")] = False):
+    asyncio.run(start_process(host, port, use_socket))
 
 
 if __name__ == '__main__':

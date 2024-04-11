@@ -5,6 +5,7 @@ import grpc
 
 from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.grpc.asyncio.ai_controller import AIController
+from pyftg.interfaces.async_gateway import IAsyncGateway
 from pyftg.models.enums.status_code import StatusCode
 from pyftg.protoc import service_pb2, service_pb2_grpc
 from pyftg.utils.resource_loader import load_ai
@@ -12,7 +13,7 @@ from pyftg.utils.resource_loader import load_ai
 logger = logging.getLogger(__name__)
 
 
-class Gateway:
+class Gateway(IAsyncGateway):
     def __init__(self, host='127.0.0.1', port=50051):
         self.host = host
         self.port = port
