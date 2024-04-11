@@ -64,7 +64,7 @@ class AIController:
 
         screen_data_packet = await self.recv_data()
         if screen_data_packet:
-            self.ai.get_screen_data(ScreenData.from_dict(orjson.loads(screen_data_packet)))
+            self.ai.get_screen_data(ScreenData.from_dict(orjson.loads(screen_data_packet), decompress=True))
 
         self.ai.processing()
         await self.send_data(self.ai.input().to_json())
