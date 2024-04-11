@@ -29,9 +29,8 @@ class AIController(Thread):
         self.player_number = player_number
     
     def initialize_socket(self) -> str:
-        # Send player number (b'\x00' is player 1, b'\x01' is player 2)
-        self.client.send(self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
-        self.client.send(self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
+        self.send_data(self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
+        self.send_data(self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
 
     def recv_data(self, n: int = -1) -> bytes:
         if n == -1:

@@ -32,11 +32,11 @@ class AIController:
 
     async def recv_data(self, n: int = -1) -> bytes:
         if n == -1:
-            header_data = await self.reader.read(4)
+            header_data = await self.reader.readexactly(4)
             n = int.from_bytes(header_data, byteorder='little')
             if n == 0:
                 return None
-        body_data = await self.reader.read(n)
+        body_data = await self.reader.readexactly(n)
         return body_data
     
     async def send_data(self, data: bytes, with_header: bool = True):
@@ -77,7 +77,7 @@ class AIController:
         self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
         await self.initialize_socket()
         while True:
-            data = await self.reader.read(1)
+            data = await self.recv_data(1)
             if not data or data == CLOSE:
                 break
             elif data == INITIALIZE:
