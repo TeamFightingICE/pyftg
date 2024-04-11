@@ -60,4 +60,4 @@ class Gateway:
     def close(self):
         for ai in self.ais:
             if ai:
-                ai.client.close()
+                ai.close()

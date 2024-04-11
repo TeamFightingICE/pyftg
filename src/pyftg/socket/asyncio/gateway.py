@@ -49,7 +49,7 @@ class Gateway:
             exit(1)
         writer.close()
         await writer.wait_closed()
-        self.start_ai()
+        await self.start_ai()
 
     async def start_ai(self):
         tasks = list()
@@ -64,5 +64,4 @@ class Gateway:
     async def close(self):
         for ai in self.ais:
             if ai:
-                ai.writer.close()
-                await ai.writer.drain()
+                await ai.close()

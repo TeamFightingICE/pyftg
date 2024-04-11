@@ -85,4 +85,6 @@ class AIController(Thread):
             else:
                 logger.error(f"Unknown data: {data}")
                 break
+    
+    def close(self):
         self.client.close()

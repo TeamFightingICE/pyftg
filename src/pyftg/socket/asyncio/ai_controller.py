@@ -86,3 +86,7 @@ class AIController:
             else:
                 logger.error(f"Unknown data: {data}")
                 break
+        
+    async def close(self):
+        self.writer.close()
+        await self.writer.wait_closed()
