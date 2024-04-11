@@ -1,5 +1,6 @@
 import grpc
 
+from pyftg.grpc.threading.observer_handler import ObserverHandler
 from pyftg.models.audio_data import AudioData
 from pyftg.models.enums.data_flag import DataFlag
 from pyftg.models.enums.flag import Flag
@@ -8,7 +9,6 @@ from pyftg.models.game_data import GameData
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
 from pyftg.protoc import service_pb2, service_pb2_grpc
-from pyftg.threading.observer_handler import ObserverHandler
 
 
 class ObserverGateway:

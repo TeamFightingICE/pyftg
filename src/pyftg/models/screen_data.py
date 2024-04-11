@@ -34,7 +34,7 @@ class ScreenData(BaseModel):
     
     @classmethod
     def from_proto(cls, proto_obj: Message, decompress=True):
-        display_bytes: bytes = proto_obj.display_as_bytes
+        display_bytes: bytes = proto_obj.display_bytes
         if decompress:
             display_bytes = gzip_decompress(display_bytes)
 

@@ -1,13 +1,14 @@
 import logging
-from socket import socket
+import socket
 from threading import Thread
+
 import orjson
 
 from pyftg.aiinterface.ai_interface import AIInterface
+from pyftg.models.audio_data import AudioData
 from pyftg.models.frame_data import FrameData
 from pyftg.models.game_data import GameData
 from pyftg.models.round_result import RoundResult
-from pyftg.models.audio_data import AudioData
 from pyftg.models.screen_data import ScreenData
 
 logger = logging.getLogger(__name__)
@@ -22,12 +23,13 @@ GAME_END = b'\x04'
 class AIController(Thread):
     def __init__(self, host: str, port: int, ai: AIInterface, player_number: bool):
         Thread.__init__(self)
+        self.host = host
+        self.port = port
         self.ai = ai
         self.player_number = player_number
-        self.client = socket()
-        self.client.connect((host, port))
     
     def initialize_socket(self) -> str:
+        # Send player number (b'\x00' is player 1, b'\x01' is player 2)
         self.client.send((not self.player_number).to_bytes(1, byteorder='little', signed=False))
 
     def recv_data(self) -> bytes:
@@ -42,10 +44,8 @@ class AIController(Thread):
         self.client.send(data)
 
     def on_initialize(self):
-        packet = self.recv_data()
-        data_obj = orjson.loads(packet)
-        game_data = GameData.from_dict(data_obj)
-        player_number = bool(self.client.recv(1))
+        game_data = GameData.from_dict(orjson.loads(self.recv_data()))
+        player_number = True if self.client.recv(1) == b'\x01' else False
         self.ai.initialize(game_data, player_number)
 
     def on_processing(self):
@@ -57,16 +57,17 @@ class AIController(Thread):
         self.ai.get_information(frame_data, is_control)
         self.ai.get_screen_data(screen_data)
         self.ai.get_audio_data(audio_data)
-        self.ai.processing()
 
-        self.send_data(orjson.dumps(self.ai.input()))
+        self.ai.processing()
+        self.send_data(self.ai.input().to_json())
 
     def on_round_end(self):
-        packet = self.recv_data()
-        data_obj = orjson.loads(packet)
-        self.ai.round_end(RoundResult.from_dict(data_obj))
+        round_result = RoundResult.from_dict(orjson.loads(self.recv_data()))
+        self.ai.round_end(round_result)
 
     def run(self):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((self.host, self.port))
         self.initialize_socket()
         while True:
             data = self.client.recv(1)

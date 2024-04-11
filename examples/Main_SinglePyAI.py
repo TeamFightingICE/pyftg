@@ -3,7 +3,7 @@ import asyncio
 import typer
 from typing_extensions import Annotated, Optional
 
-from pyftg.asyncio.gateway import Gateway
+from pyftg.grpc.asyncio.gateway import Gateway
 from pyftg.utils.logging import DEBUG, set_logging
 
 app = typer.Typer(pretty_exceptions_enable=False)
