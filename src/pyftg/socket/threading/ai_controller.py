@@ -29,18 +29,19 @@ class AIController(Thread):
         self.ai = ai
         self.player_number = player_number
     
-    def initialize_socket(self) -> None:
+    def initialize(self) -> None:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
-        send_data(self.client, self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
-        send_data(self.client, self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
+        request: Message = service_pb2.InitializeRequest(player_number=self.player_number, player_name=self.ai.name(), is_blind=self.ai.is_blind())
+        send_data(self.client, b'\x01', with_header=False)  # 1: Initialize
+        send_data(self.client, request.SerializeToString())
 
     def send_input_key(self, key: Key) -> None:
         grpc_key: Message = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
         send_data(self.client, grpc_key.SerializeToString())
 
     def run(self):
-        self.initialize_socket()
+        self.initialize()
         while True:
             data = self.client.recv(1)
             if not data or data == CLOSE:

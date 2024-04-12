@@ -27,17 +27,18 @@ class AIController:
         self.ai = ai
         self.player_number = player_number
     
-    async def initialize_socket(self) -> None:
+    async def initialize(self) -> None:
         self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
-        await send_data(self.writer, self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
-        await send_data(self.writer, self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
+        request: Message = service_pb2.InitializeRequest(player_number=self.player_number, player_name=self.ai.name(), is_blind=self.ai.is_blind())
+        await send_data(self.writer, b'\x01', with_header=False)  # 1: Initialize
+        await send_data(self.writer, request.SerializeToString())
 
     async def send_input_key(self, key: Key) -> None:
         grpc_key: Message = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
         await send_data(self.writer, grpc_key.SerializeToString())
 
     async def run(self):
-        await self.initialize_socket()
+        await self.initialize()
         while True:
             data = await recv_data(self.reader, 1)
             if not data or data == CLOSE:
