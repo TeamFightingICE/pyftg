@@ -1,14 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-import orjson
-
 
 @dataclass
 class BaseModel(ABC):
-    def to_json(self) -> bytes:
-        return orjson.dumps(self)
-
     @abstractmethod
     def to_dict(self) -> dict:
         pass

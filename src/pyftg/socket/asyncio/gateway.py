@@ -1,14 +1,14 @@
 import asyncio
 import logging
 
-import orjson
+from google.protobuf.message import Message
 
 from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.interfaces.async_gateway import IAsyncGateway
 from pyftg.models.enums.status_code import StatusCode
+from pyftg.protoc import service_pb2
 from pyftg.socket.asyncio.ai_controller import AIController
-from pyftg.socket.models.run_game_request import RunGameRequest
-from pyftg.socket.models.run_game_response import RunGameResponse
+from pyftg.socket.utils.asyncio import recv_data, send_data
 from pyftg.utils.resource_loader import load_ai
 
 logger = logging.getLogger(__name__)
@@ -38,16 +38,22 @@ class Gateway(IAsyncGateway):
                 agents[i] = None
             elif agents[i] in self.registered_agents:
                 self.agents[i] = self.registered_agents[agents[i]]
+
         reader, writer = await asyncio.open_connection(self.host, self.port)
-        request = RunGameRequest(character_1=characters[0], character_2=characters[1], player_1=agents[0], player_2=agents[1], game_number=game_number)
-        writer.write(b'\x02')  # RunGame
-        await writer.drain()
-        writer.write(request.to_json())
-        await writer.drain()
-        response = RunGameResponse.from_dict(orjson.loads(await reader.read(256)))
+
+        request: Message = service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1],
+                                                      player_1=agents[0], player_2=agents[1], game_number=game_number)
+        await send_data(writer, b'\x02', with_header=False)  # 2: Run Game
+        await send_data(writer, request.SerializeToString())
+        
+        response_packet = await recv_data(reader)
+        response: Message = service_pb2.RunGameResponse()
+        response.ParseFromString(response_packet)
+
         if response.status_code is StatusCode.FAILED:
             logger.error(response.response_message)
             exit(1)
+
         writer.close()
         await writer.wait_closed()
         await self.start_ai()
