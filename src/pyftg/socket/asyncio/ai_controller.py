@@ -26,7 +26,8 @@ class AIController:
         self.ai = ai
         self.player_number = player_number
     
-    async def initialize_socket(self) -> str:
+    async def initialize_socket(self) -> None:
+        self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
         await self.send_data(self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
         await self.send_data(self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
 
@@ -39,7 +40,7 @@ class AIController:
         body_data = await self.reader.readexactly(n)
         return body_data
     
-    async def send_data(self, data: bytes, with_header: bool = True):
+    async def send_data(self, data: bytes, with_header: bool = True) -> None:
         if with_header:
             buffer_size = len(data).to_bytes(4, byteorder='little')
             self.writer.write(buffer_size)
@@ -47,34 +48,42 @@ class AIController:
         self.writer.write(data)
         await self.writer.drain()
 
-    async def on_initialize(self):
-        game_data = GameData.from_dict(orjson.loads(await self.recv_data()))
-        player_number = True if await self.recv_data(1) == b'\x01' else False
+    async def on_initialize(self) -> None:
+        game_data_packet = await self.recv_data()
+        player_number_packet = await self.recv_data(1)
+
+        game_data = GameData.from_dict(orjson.loads(game_data_packet))
+        player_number = player_number_packet == b'\x01'
+
         self.ai.initialize(game_data, player_number)
 
-    async def on_processing(self):
+    async def on_processing(self) -> None:
         is_control = bool(await self.recv_data(1))
 
         non_delay_frame_data_packet = await self.recv_data()
+        frame_data_packet = await self.recv_data()
+        audio_data_packet = await self.recv_data()
+        screen_data_packet = await self.recv_data()
+
         if non_delay_frame_data_packet:
             self.ai.get_non_delay_frame_data(FrameData.from_dict(orjson.loads(non_delay_frame_data_packet)))
 
-        self.ai.get_information(FrameData.from_dict(orjson.loads(await self.recv_data())), is_control)
-        self.ai.get_audio_data(AudioData.from_dict(orjson.loads(await self.recv_data())))
-
-        screen_data_packet = await self.recv_data()
         if screen_data_packet:
             self.ai.get_screen_data(ScreenData.from_dict(orjson.loads(screen_data_packet), decompress=True))
+
+        self.ai.get_information(FrameData.from_dict(orjson.loads(frame_data_packet)), is_control)
+        self.ai.get_audio_data(AudioData.from_dict(orjson.loads(audio_data_packet)))
 
         self.ai.processing()
         await self.send_data(self.ai.input().to_json())
 
-    async def on_round_end(self):
-        round_result = RoundResult.from_dict(orjson.loads(await self.recv_data()))
+    async def on_round_end(self) -> None:
+        round_result_packet = await self.recv_data()
+
+        round_result = RoundResult.from_dict(orjson.loads(round_result_packet))
         self.ai.round_end(round_result)
 
     async def run(self):
-        self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
         await self.initialize_socket()
         while True:
             data = await self.recv_data(1)

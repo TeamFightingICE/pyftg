@@ -2,6 +2,8 @@ import logging
 from threading import Thread
 from typing import Generator
 
+from google.protobuf.message import Message
+
 from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.models.audio_data import AudioData
 from pyftg.models.enums.flag import Flag
@@ -11,7 +13,6 @@ from pyftg.models.key import Key
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
 from pyftg.protoc import message_pb2, service_pb2, service_pb2_grpc
-from pyftg.types.grpc import PlayerGameState
 
 logger = logging.getLogger(__name__)
 
@@ -28,14 +29,13 @@ class AIController(Thread):
         response = self.stub.Initialize(request)
         return response.player_uuid
 
-    def participate_rpc(self, player_uuid: str) -> Generator[PlayerGameState, None, None]:
+    def participate_rpc(self, player_uuid: str) -> Generator[Message, None, None]:
         request = service_pb2.ParticipateRequest(player_uuid=player_uuid)
         return self.stub.Participate(request)
     
-    def input_rpc(self, player_uuid: str, key: Key) -> int:
+    def input_rpc(self, player_uuid: str, key: Key) -> None:
         grpc_key = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
         self.stub.Input(service_pb2.PlayerInput(player_uuid=player_uuid, input_key=grpc_key))
-        return 0
     
     def run(self):
         player_uuid = self.initialize_rpc()
@@ -47,14 +47,12 @@ class AIController(Thread):
                 if state.HasField("non_delay_frame_data"):
                     self.ai.get_non_delay_frame_data(FrameData.from_proto(state.non_delay_frame_data))
 
-                self.ai.get_information(FrameData.from_proto(state.frame_data), state.is_control)
-
                 if state.HasField("screen_data"):
                     self.ai.get_screen_data(ScreenData.from_proto(state.screen_data))
 
-                if state.HasField("audio_data"):
-                    self.ai.get_audio_data(AudioData.from_proto(state.audio_data))
-                    
+                self.ai.get_information(FrameData.from_proto(state.frame_data), state.is_control)
+                self.ai.get_audio_data(AudioData.from_proto(state.audio_data))
+
                 self.ai.processing()
                 self.input_rpc(player_uuid, self.ai.input())
             elif flag is Flag.ROUND_END:

@@ -28,7 +28,9 @@ class AIController(Thread):
         self.ai = ai
         self.player_number = player_number
     
-    def initialize_socket(self) -> str:
+    def initialize_socket(self) -> None:
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((self.host, self.port))
         self.send_data(self.player_number.to_bytes(1, byteorder='little', signed=False), with_header=False)
         self.send_data(self.ai.is_blind().to_bytes(1, byteorder='little', signed=False), with_header=False)
 
@@ -41,41 +43,49 @@ class AIController(Thread):
         body_data = self.client.recv(n)
         return body_data
     
-    def send_data(self, data: bytes, with_header: bool = True):
+    def send_data(self, data: bytes, with_header: bool = True) -> None:
         if with_header:
             buffer_size = len(data).to_bytes(4, byteorder='little')
             self.client.send(buffer_size)
         self.client.send(data)
 
-    def on_initialize(self):
-        game_data = GameData.from_dict(orjson.loads(self.recv_data()))
-        player_number = True if self.client.recv(1) == b'\x01' else False
+    def on_initialize(self) -> None:
+        game_data_packet = self.recv_data()
+        player_number_packet = self.recv_data(1)
+
+        game_data = GameData.from_dict(orjson.loads(game_data_packet))
+        player_number = player_number_packet == b'\x01'
+
         self.ai.initialize(game_data, player_number)
 
-    def on_processing(self):
+    def on_processing(self) -> None:
         is_control = bool(self.client.recv(1))
 
         non_delay_frame_data_packet = self.recv_data()
+        frame_data_packet = self.recv_data()
+        audio_data_packet = self.recv_data()
+        screen_data_packet = self.recv_data()
+        screen_data_packet = self.recv_data()
+
         if non_delay_frame_data_packet:
             self.ai.get_non_delay_frame_data(FrameData.from_dict(orjson.loads(non_delay_frame_data_packet)))
 
-        self.ai.get_information(FrameData.from_dict(orjson.loads(self.recv_data())), is_control)
-        self.ai.get_audio_data(AudioData.from_dict(orjson.loads(self.recv_data())))
-
-        screen_data_packet = self.recv_data()
         if screen_data_packet:
             self.ai.get_screen_data(ScreenData.from_dict(orjson.loads(screen_data_packet), decompress=True))
+
+        self.ai.get_information(FrameData.from_dict(orjson.loads(frame_data_packet)), is_control)
+        self.ai.get_audio_data(AudioData.from_dict(orjson.loads(audio_data_packet)))
 
         self.ai.processing()
         self.send_data(self.ai.input().to_json())
 
-    def on_round_end(self):
-        round_result = RoundResult.from_dict(orjson.loads(self.recv_data()))
+    def on_round_end(self) -> None:
+        round_result_packet = self.recv_data()
+
+        round_result = RoundResult.from_dict(orjson.loads(round_result_packet))
         self.ai.round_end(round_result)
 
     def run(self):
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect((self.host, self.port))
         self.initialize_socket()
         while True:
             data = self.client.recv(1)
