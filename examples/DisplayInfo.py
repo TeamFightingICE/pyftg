@@ -57,8 +57,8 @@ class DisplayInfo(AIInterface):
         self.input_key.empty()
         self.cc.skill_cancel()
 
-        # calcultate the distance
-        distance = self.calculate_distance(self.screen_data.display_as_bytes)
+        # calculate the distance
+        distance = self.calculate_distance(self.screen_data.display_bytes)
         if distance == -1:
             self.cc.command_call("STAND_A") # default action
         else:
@@ -73,7 +73,7 @@ class DisplayInfo(AIInterface):
                 self.cc.command_call("STAND_D_DF_FA")
                         
     def calculate_distance(self, display_buffer: bytes):
-        for y in range(self.height):
+        for y in reversed(range(self.height)):
             # when searching for the same row is over, reset each data
             previousPixel = 0
             leftCharacterX = -1
