@@ -12,8 +12,9 @@ from pyftg.models.game_data import GameData
 from pyftg.models.key import Key
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
-from pyftg.protoc import message_pb2, service_pb2
+from pyftg.protoc import service_pb2
 from pyftg.socket.utils.threading import recv_data, send_data
+from pyftg.utils.protobuf import convert_key_to_proto
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +38,8 @@ class AIController(Thread):
         send_data(self.client, request.SerializeToString())
 
     def send_input_key(self, key: Key) -> None:
-        grpc_key: Message = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
-        send_data(self.client, grpc_key.SerializeToString())
+        proto_key = convert_key_to_proto(key)
+        send_data(self.client, proto_key.SerializeToString())
 
     def run(self):
         self.initialize()

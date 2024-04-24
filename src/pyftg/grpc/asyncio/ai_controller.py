@@ -11,7 +11,8 @@ from pyftg.models.game_data import GameData
 from pyftg.models.key import Key
 from pyftg.models.round_result import RoundResult
 from pyftg.models.screen_data import ScreenData
-from pyftg.protoc import message_pb2, service_pb2, service_pb2_grpc
+from pyftg.protoc import service_pb2, service_pb2_grpc
+from pyftg.utils.protobuf import convert_key_to_proto
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +33,8 @@ class AIController():
         return self.stub.Participate(request)
     
     async def input_rpc(self, player_uuid: str, key: Key) -> None:
-        grpc_key = message_pb2.GrpcKey(A=key.A, B=key.B, C=key.C, U=key.U, D=key.D, L=key.L, R=key.R)
-        await self.stub.Input(service_pb2.PlayerInput(player_uuid=player_uuid, input_key=grpc_key))
+        proto_key = convert_key_to_proto(key)
+        await self.stub.Input(service_pb2.PlayerInput(player_uuid=player_uuid, input_key=proto_key))
     
     async def run(self):
         player_uuid = await self.initialize_rpc()
