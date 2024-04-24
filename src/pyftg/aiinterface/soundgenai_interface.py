@@ -3,7 +3,7 @@ from pyftg.models.game_data import GameData
 from pyftg.models.round_result import RoundResult
 
 
-class SoundAIInterface:
+class SoundGenAIInterface:
     def initialize(self, game_data: GameData):
         pass
 

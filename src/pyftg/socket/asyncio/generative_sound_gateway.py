@@ -3,7 +3,7 @@ import logging
 
 from google.protobuf.message import Message
 
-from pyftg.aiinterface.sound_ai_interface import SoundAIInterface
+from pyftg.aiinterface.soundgenai_interface import SoundGenAIInterface
 from pyftg.models.enums.flag import Flag
 from pyftg.models.frame_data import FrameData
 from pyftg.models.game_data import GameData
@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 CLOSE = b'\x00'
 PROCESSING = b'\x01'
+INIT_SOUND_GENAI = b'\x03'
 
 
 class GenerativeSoundGateway:
@@ -23,12 +24,12 @@ class GenerativeSoundGateway:
         self.port = port
         self.cancelled = False
 
-    def set_sound_ai(self, sound_ai: SoundAIInterface) -> None:
+    def set_sound_ai(self, sound_ai: SoundGenAIInterface) -> None:
         self.sound_ai = sound_ai
 
     async def initialize(self):
         self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
-        await send_data(self.writer, b'\x03', with_header=False)
+        await send_data(self.writer, INIT_SOUND_GENAI, with_header=False)
         logger.info(f'Connected to DareFightingICE at {self.host}:{self.port}')
 
     async def run(self):
