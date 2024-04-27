@@ -1,1 +1,2 @@
 python -m grpc_tools.protoc -I.\protos --python_out=.\src\pyftg\protoc --grpc_python_out=.\src\pyftg\protoc .\protos\*.proto
+protol --create-package --in-place --python-out .\src\pyftg\protoc protoc --proto-path=.\protos .\protos\*.proto

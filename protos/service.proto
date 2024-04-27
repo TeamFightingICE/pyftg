@@ -4,6 +4,9 @@ import "enum.proto";
 import "message.proto";
 package service;
 
+option java_multiple_files = false;
+option java_package = "protoc";
+option java_outer_classname = "ServiceProto";
 option csharp_namespace = "DareFightingICE.Grpc.Proto";
 
 message RunGameRequest {

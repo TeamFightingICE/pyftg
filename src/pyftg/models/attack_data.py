@@ -30,6 +30,7 @@ class AttackData(BaseModel):
     attack_type: int
     down_prop: bool
     is_projectile: bool
+    empty_flag: bool
     
     def to_dict(self):
         return {
@@ -54,14 +55,12 @@ class AttackData(BaseModel):
             "give_guard_recov": self.give_guard_recov,
             "attack_type": self.attack_type,
             "down_prop": self.down_prop,
-            "is_projectile": self.is_projectile
+            "is_projectile": self.is_projectile,
+            "empty_flag": self.empty_flag
         }
 
     @classmethod
     def from_dict(cls, data_obj: dict):
-        if not data_obj:
-            return cls.get_default_instance()
-
         return AttackData(
             setting_hit_area=HitArea.from_dict(data_obj["setting_hit_area"]),
             setting_speed_x=data_obj["setting_speed_x"],
@@ -84,7 +83,8 @@ class AttackData(BaseModel):
             give_guard_recov=data_obj["give_guard_recov"],
             attack_type=data_obj["attack_type"],
             down_prop=data_obj["down_prop"],
-            is_projectile=data_obj["is_projectile"]
+            is_projectile=data_obj["is_projectile"],
+            empty_flag=data_obj["empty_flag"]
         )
     
     @classmethod
@@ -112,6 +112,7 @@ class AttackData(BaseModel):
             attack_type=proto_obj.attack_type,
             down_prop=proto_obj.down_prop,
             is_projectile=proto_obj.is_projectile,
+            empty_flag=proto_obj.empty_flag
         )
     
     @classmethod
@@ -121,5 +122,5 @@ class AttackData(BaseModel):
             current_hit_area=HitArea.get_default_instance(), current_frame=0, player_number=False,
             speed_x=0, speed_y=0, start_up=0, active=0, hit_damage=0, guard_damage=0,
             start_add_energy=0, hit_add_energy=0, guard_add_energy=0, give_energy=0,
-            impact_x=0, impact_y=0, give_guard_recov=0, attack_type=0, down_prop=False, is_projectile=False
+            impact_x=0, impact_y=0, give_guard_recov=0, attack_type=0, down_prop=False, is_projectile=False, empty_flag=True
         )

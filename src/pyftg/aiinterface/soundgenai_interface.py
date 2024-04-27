@@ -4,7 +4,7 @@ from pyftg.models.round_result import RoundResult
 
 
 class SoundGenAIInterface:
-    def initialize(self, game_data: GameData):
+    def init_round(self):
         pass
 
     def processing_game(self, frame_data: FrameData):

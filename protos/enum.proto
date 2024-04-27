@@ -1,6 +1,9 @@
 syntax = "proto3";
 package service;
 
+option java_multiple_files = false;
+option java_package = "protoc";
+option java_outer_classname = "EnumProto";
 option csharp_namespace = "DareFightingICE.Grpc.Proto";
 
 enum GrpcStatusCode {
@@ -14,6 +17,7 @@ enum GrpcFlag {
 	PROCESSING = 2;
 	ROUND_END = 3;
 	GAME_END = 4;
+	INIT_ROUND = 5;
 }
 
 enum GrpcState {

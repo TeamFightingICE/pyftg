@@ -7,3 +7,4 @@ class Flag(int, Enum):
     PROCESSING = 2
     ROUND_END = 3
     GAME_END = 4
+    INIT_ROUND = 5
