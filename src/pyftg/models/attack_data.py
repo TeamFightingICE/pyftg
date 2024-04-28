@@ -31,6 +31,7 @@ class AttackData(BaseModel):
     attack_type: int
     down_prop: bool
     is_projectile: bool
+    is_live: bool
     empty_flag: bool
     identifier: str
     
@@ -58,6 +59,7 @@ class AttackData(BaseModel):
             "attack_type": self.attack_type,
             "down_prop": self.down_prop,
             "is_projectile": self.is_projectile,
+            "is_live": self.is_live,
             "empty_flag": self.empty_flag,
             "identifier": self.identifier
         }
@@ -87,6 +89,7 @@ class AttackData(BaseModel):
             attack_type=data_obj["attack_type"],
             down_prop=data_obj["down_prop"],
             is_projectile=data_obj["is_projectile"],
+            is_live=data_obj["is_live"],
             empty_flag=data_obj["empty_flag"],
             identifier=data_obj["identifier"]
         )
@@ -116,6 +119,7 @@ class AttackData(BaseModel):
             attack_type=proto_obj.attack_type,
             down_prop=proto_obj.down_prop,
             is_projectile=proto_obj.is_projectile,
+            is_live=proto_obj.is_live,
             empty_flag=proto_obj.empty_flag,
             identifier=proto_obj.identifier
         )
@@ -127,6 +131,6 @@ class AttackData(BaseModel):
             current_hit_area=HitArea.get_default_instance(), current_frame=0, player_number=False,
             speed_x=0, speed_y=0, start_up=0, active=0, hit_damage=0, guard_damage=0,
             start_add_energy=0, hit_add_energy=0, guard_add_energy=0, give_energy=0,
-            impact_x=0, impact_y=0, give_guard_recov=0, attack_type=0, down_prop=False, is_projectile=False, 
-            empty_flag=True, identifier=str(uuid.uuid4())
+            impact_x=0, impact_y=0, give_guard_recov=0, attack_type=0, down_prop=False, 
+            is_live=False, is_projectile=False, empty_flag=True, identifier=''
         )

@@ -6,6 +6,7 @@ from google.protobuf.message import Message
 from pyftg.aiinterface.soundgenai_interface import SoundGenAIInterface
 from pyftg.models.enums.flag import Flag
 from pyftg.models.frame_data import FrameData
+from pyftg.models.game_data import GameData
 from pyftg.models.round_result import RoundResult
 from pyftg.protoc import service_pb2
 from pyftg.socket.utils.asyncio import recv_data, send_data
@@ -45,19 +46,21 @@ class GenerativeSoundGateway:
                 state_proto.ParseFromString(state_bytes)
                 
                 flag = Flag(state_proto.state_flag)
-                if flag is Flag.PROCESSING:
+                if flag is Flag.INITIALIZE:
+                    self.sound_ai.initialize(GameData.from_proto(state_proto.game_data))
+                elif flag is Flag.PROCESSING:
                     frame_data = FrameData.from_proto(state_proto.frame_data)
                     if frame_data.current_frame_number == 0:
                         self.sound_ai.init_round()
                     self.sound_ai.processing_game(frame_data)
+
+                    audio_data_bytes = self.sound_ai.audio_sample()
+                    await send_data(self.writer, audio_data_bytes)
                 elif flag is Flag.ROUND_END:
                     self.sound_ai.round_end(RoundResult.from_proto(state_proto.round_result))
                 elif flag is Flag.GAME_END:
                     self.sound_ai.round_end(RoundResult.from_proto(state_proto.round_result))
                     self.sound_ai.game_end()
-
-                audio_data_bytes = self.sound_ai.audio_sample()
-                await send_data(self.writer, audio_data_bytes)
 
     async def close(self):
         self.writer.close()

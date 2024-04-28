@@ -35,8 +35,6 @@ class CharacterData(BaseModel):
     hit_count: int
     last_hit_frame: int
     projectile_attack: List[AttackData]
-    projectile_live: List[bool]
-    projectile_hit: List[bool]
     
     def to_dict(self):
         return {
@@ -63,9 +61,7 @@ class CharacterData(BaseModel):
             "graphic_adjust_x": self.graphic_adjust_x,
             "hit_count": self.hit_count,
             "last_hit_frame": self.last_hit_frame,
-            "projectile_attack": [attack.to_dict() for attack in self.projectile_attack],
-            "projectile_live": self.projectile_live,
-            "projectile_hit": self.projectile_hit
+            "projectile_attack": [attack.to_dict() for attack in self.projectile_attack]
         }
 
     @classmethod
@@ -94,9 +90,7 @@ class CharacterData(BaseModel):
             graphic_adjust_x=data_obj["graphic_adjust_x"],
             hit_count=data_obj["hit_count"],
             last_hit_frame=data_obj["last_hit_frame"],
-            projectile_attack=[AttackData.from_dict(attack) for attack in data_obj["projectile_attack"]],
-            projectile_live=data_obj["projectile_live"],
-            projectile_hit=data_obj["projectile_hit"]
+            projectile_attack=[AttackData.from_dict(attack) for attack in data_obj["projectile_attack"]]
         )
     
     @classmethod
@@ -125,9 +119,7 @@ class CharacterData(BaseModel):
             graphic_adjust_x=proto_obj.graphic_adjust_x,
             hit_count=proto_obj.hit_count,
             last_hit_frame=proto_obj.last_hit_frame,
-            projectile_attack=[AttackData.from_proto(attack) for attack in proto_obj.projectile_attack],
-            projectile_live=proto_obj.projectile_live,
-            projectile_hit=proto_obj.projectile_hit
+            projectile_attack=[AttackData.from_proto(attack) for attack in proto_obj.projectile_attack]
         )
     
     @classmethod
@@ -137,5 +129,5 @@ class CharacterData(BaseModel):
             speed_x=0, speed_y=0, state=State.STAND, action=Action.NEUTRAL, front=False, control=False,
             attack_data=AttackData.get_default_instance(), remaining_frame=0, hit_confirm=False,
             graphic_size_x=0, graphic_size_y=0, graphic_adjust_x=0, hit_count=0, last_hit_frame=0,
-            projectile_attack=[AttackData.get_default_instance()] * 3, projectile_live=[False] * 3, projectile_hit=[False] * 3
+            projectile_attack=[AttackData.get_default_instance()] * 3
         )
