@@ -48,12 +48,10 @@ class GenerativeSoundGateway:
                 flag = Flag(state_proto.state_flag)
                 if flag is Flag.INITIALIZE:
                     self.sound_ai.initialize(GameData.from_proto(state_proto.game_data))
+                elif flag is Flag.INIT_ROUND:
+                    self.sound_ai.init_round()
                 elif flag is Flag.PROCESSING:
-                    frame_data = FrameData.from_proto(state_proto.frame_data)
-                    if frame_data.current_frame_number == 0:
-                        self.sound_ai.init_round()
-                    self.sound_ai.processing_game(frame_data)
-
+                    self.sound_ai.processing_game(FrameData.from_proto(state_proto.frame_data))
                     audio_data_bytes = self.sound_ai.audio_sample()
                     await send_data(self.writer, audio_data_bytes)
                 elif flag is Flag.ROUND_END:
