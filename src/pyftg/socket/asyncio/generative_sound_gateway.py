@@ -57,7 +57,6 @@ class GenerativeSoundGateway:
                 elif flag is Flag.ROUND_END:
                     self.sound_ai.round_end(RoundResult.from_proto(state_proto.round_result))
                 elif flag is Flag.GAME_END:
-                    self.sound_ai.round_end(RoundResult.from_proto(state_proto.round_result))
                     self.sound_ai.game_end()
 
     async def close(self):
