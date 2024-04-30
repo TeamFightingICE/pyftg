@@ -60,5 +60,6 @@ class GenerativeSoundGateway:
                     self.sound_ai.game_end()
 
     async def close(self):
+        self.sound_ai.close()
         self.writer.close()
         await self.writer.wait_closed()

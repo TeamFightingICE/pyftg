@@ -7,25 +7,29 @@ from pyftg.models.round_result import RoundResult
 
 class SoundGenAIInterface(ABC):
     @abstractmethod
-    def initialize(self, game_data: GameData):
+    def initialize(self, game_data: GameData) -> None:
         pass
 
     @abstractmethod
-    def init_round(self):
+    def init_round(self) -> None:
         pass
 
     @abstractmethod
-    def processing_game(self, frame_data: FrameData):
+    def processing_game(self, frame_data: FrameData) -> None:
         pass
 
     @abstractmethod
-    def round_end(self, round_result: RoundResult):
+    def round_end(self, round_result: RoundResult) -> None:
         pass
 
     @abstractmethod
-    def game_end(self):
+    def game_end(self) -> None:
         pass
 
     @abstractmethod
     def audio_sample(self) -> bytes:
+        pass
+
+    @abstractmethod
+    def close(self) -> None:
         pass
