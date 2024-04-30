@@ -23,8 +23,9 @@ class GenerativeSoundGateway:
         self.host = host
         self.port = port
         self.cancelled = False
+        self.sound_ai: SoundGenAIInterface = None
 
-    def set_sound_ai(self, sound_ai: SoundGenAIInterface) -> None:
+    def register(self, sound_ai: SoundGenAIInterface) -> None:
         self.sound_ai = sound_ai
 
     async def initialize(self):
@@ -33,6 +34,9 @@ class GenerativeSoundGateway:
         logger.info(f'Connected to DareFightingICE at {self.host}:{self.port}')
 
     async def run(self):
+        if not self.sound_ai:
+            raise ValueError('Sound AI is not registered')
+
         await self.initialize()
 
         while not self.cancelled:

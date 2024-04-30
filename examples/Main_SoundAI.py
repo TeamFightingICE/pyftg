@@ -14,7 +14,7 @@ app = typer.Typer(pretty_exceptions_enable=False)
 async def start_process(host: str, port: int):
     gateway = GenerativeSoundGateway(host, port)
     sound_ai = TestSoundAI()
-    gateway.set_sound_ai(sound_ai)
+    gateway.register(sound_ai)
     await gateway.run()
     await gateway.close()
 
