@@ -20,7 +20,7 @@ async def start_process(host: str, port: int, use_grpc: bool, a1: str, a2: str):
 def main(
         host: Annotated[Optional[str], typer.Option(help="Host used by DareFightingICE")] = "127.0.0.1",
         port: Annotated[Optional[int], typer.Option(help="Port used by DareFightingICE")] = 50051,
-        use_grpc: Annotated[Optional[bool], typer.Option(help="Use gRPC instead of socket")] = False,
+        use_grpc: Annotated[Optional[bool], typer.Option(help="Use gRPC instead of socket")] = True,
         a1: Annotated[Optional[str], typer.Option(help="The AI name to use for player 1")] = None,
         a2: Annotated[Optional[str], typer.Option(help="The AI name to use for player 2")] = None):
     asyncio.run(start_process(host, port, use_grpc, a1, a2))

@@ -25,7 +25,7 @@ async def start_process(host: str, port: int, use_grpc: bool, character: str = "
 def main(
         host: Annotated[Optional[str], typer.Option(help="Host used by DareFightingICE")] = "127.0.0.1",
         port: Annotated[Optional[int], typer.Option(help="Port used by DareFightingICE")] = 50051,
-        use_grpc: Annotated[Optional[bool], typer.Option(help="Use gRPC instead of socket")] = False):
+        use_grpc: Annotated[Optional[bool], typer.Option(help="Use gRPC instead of socket")] = True):
     asyncio.run(start_process(host, port, use_grpc))
 
 
