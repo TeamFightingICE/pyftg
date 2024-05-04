@@ -1,6 +1,6 @@
 [project]
 name = "pyftg"
-version = "2.1rc6"
+version = "2.1"
 authors = [
   { name="TeamFightingICE" },
 ]
