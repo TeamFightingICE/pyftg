@@ -3,6 +3,7 @@
 ## File Description
 - ```DisplayInfo.py``` is an example AI that utilizes screen data as input.
 - ```KickAI.py``` is an example AI that only executes a single command.
+- ```OneSecondAI.py``` is an example AI that utilizes multi-threading to achieve a processing time of one second.
 - ```Main_PyAIvsPyAI.py``` is the script to run two instances of the Python AI and set up the game. This is when both AI are implemented using Python
 - ```Main_SinglePyAI.py``` is the script to run a single instance of the Python AI, e.g. when the opposing AI is not implemented using Python.
 
