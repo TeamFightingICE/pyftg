@@ -26,7 +26,7 @@ class AIInterface(ABC):
         pass
 
     @abstractmethod
-    def get_information(self, frame_data: FrameData, is_control: bool, non_delay_frame_data: FrameData):
+    def get_information(self, frame_data: FrameData, is_control: bool):
         pass
 
     @abstractmethod

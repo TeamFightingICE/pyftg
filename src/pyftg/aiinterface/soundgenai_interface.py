@@ -11,11 +11,11 @@ class SoundGenAIInterface(ABC):
         pass
 
     @abstractmethod
-    def init_round(self) -> None:
+    def get_information(self, frame_data: FrameData) -> None:
         pass
 
     @abstractmethod
-    def processing_game(self, frame_data: FrameData) -> None:
+    def processing(self) -> None:
         pass
 
     @abstractmethod

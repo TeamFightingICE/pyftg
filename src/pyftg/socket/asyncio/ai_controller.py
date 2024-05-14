@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 
 from google.protobuf.message import Message
 
@@ -45,9 +46,12 @@ class AIController:
             if not data or data == CLOSE:
                 break
             elif data == PROCESSING:
+                start = time.perf_counter_ns()
                 state_packet = await recv_data(self.reader)
                 state: Message = service_pb2.PlayerGameState()
                 state.ParseFromString(state_packet)
+                end = time.perf_counter_ns()
+                print("processing time:", (end - start) / 1e6, "ms")
 
                 flag = Flag(state.state_flag)
                 if flag is Flag.INITIALIZE:
