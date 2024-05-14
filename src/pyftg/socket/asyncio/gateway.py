@@ -5,11 +5,13 @@ from google.protobuf.message import Message
 
 from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.aiinterface.soundgenai_interface import SoundGenAIInterface
+from pyftg.aiinterface.stream_interface import StreamInterface
 from pyftg.interfaces.async_gateway import IAsyncGateway
 from pyftg.models.enums.status_code import StatusCode
 from pyftg.protoc import service_pb2
 from pyftg.socket.asyncio.ai_controller import AIController
 from pyftg.socket.asyncio.sound_controller import SoundController
+from pyftg.socket.asyncio.stream_controller import StreamController
 from pyftg.socket.utils.asyncio import recv_data, send_data
 from pyftg.utils.resource_loader import load_ai
 
@@ -17,14 +19,16 @@ logger = logging.getLogger(__name__)
 
 
 class Gateway(IAsyncGateway):
-    def __init__(self, host='127.0.0.1', port=50051):
+    def __init__(self, host='127.0.0.1', port=31415):
         self.host = host
         self.port = port
         self.registered_agents: dict[str, AIInterface] = dict()
         self.agents: list[AIInterface] = [None, None]
         self.ais: list[AIController] = [None, None]
         self.sound_agent: SoundGenAIInterface = None
+        self.stream_agent: StreamInterface = None
         self.sound: SoundController = None
+        self.stream: StreamController = None
     
     def load_agent(self, ai_names: list[str]):
         if ai_names[0] is None and ai_names[1] is None:
@@ -38,6 +42,9 @@ class Gateway(IAsyncGateway):
 
     def register_sound(self, agent: SoundGenAIInterface):
         self.sound_agent = agent
+
+    def register_stream(self, stream_agent: StreamInterface):
+        self.stream_agent = stream_agent
 
     async def run_game(self, characters: list[str], agents: list[str], game_number: int):
         for i in range(2):
@@ -82,6 +89,15 @@ class Gateway(IAsyncGateway):
             self.sound = SoundController(self.host, self.port, self.sound_agent)
             tasks.append(loop.create_task(self.sound.run()))
             logger.info(f"Sound controller is ready.")
+        await asyncio.gather(*tasks)
+
+    async def start_stream(self):
+        tasks = list()
+        loop = asyncio.get_event_loop()
+        if self.stream_agent:
+            self.stream = StreamController(self.host, self.port, self.stream_agent)
+            tasks.append(loop.create_task(self.stream.run()))
+            logger.info(f"Stream controller is ready.")
         await asyncio.gather(*tasks)
 
     async def close(self):

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from pyftg.aiinterface.ai_interface import AIInterface
 from pyftg.aiinterface.soundgenai_interface import SoundGenAIInterface
+from pyftg.aiinterface.stream_interface import StreamInterface
 
 
 class IAsyncGateway(ABC):
@@ -18,6 +19,10 @@ class IAsyncGateway(ABC):
         pass
 
     @abstractmethod
+    def register_stream(self, stream: StreamInterface):
+        pass
+
+    @abstractmethod
     async def run_game(self, characters: list[str], agents: list[str], game_number: int):
         pass
 
@@ -27,6 +32,10 @@ class IAsyncGateway(ABC):
 
     @abstractmethod
     async def start_sound(self):
+        pass
+
+    @abstractmethod
+    async def start_stream(self):
         pass
 
     @abstractmethod
