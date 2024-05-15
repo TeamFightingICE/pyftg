@@ -7,8 +7,8 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class FFTData(BaseModel):
-    real_data_bytes: str
-    imaginary_data_bytes: str
+    real_data_bytes: bytes
+    imaginary_data_bytes: bytes
     
     def to_dict(self):
         return {

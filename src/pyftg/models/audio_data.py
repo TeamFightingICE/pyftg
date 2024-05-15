@@ -9,9 +9,9 @@ from pyftg.models.fft_data import FFTData
 
 @dataclass
 class AudioData(BaseModel):
-    raw_data_bytes: str
+    raw_data_bytes: bytes
     fft_data: List[FFTData]
-    spectrogram_data_bytes: str
+    spectrogram_data_bytes: bytes
 
     def to_dict(self):
         return {

@@ -1,4 +1,3 @@
-import uuid
 from dataclasses import dataclass
 
 from google.protobuf.message import Message
