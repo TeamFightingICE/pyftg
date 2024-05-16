@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from google.protobuf.message import Message
 
@@ -8,10 +8,10 @@ from pyftg.models.hit_area import HitArea
 
 @dataclass
 class AttackData(BaseModel):
-    setting_hit_area: HitArea = HitArea()
+    setting_hit_area: HitArea = field(default_factory=HitArea)
     setting_speed_x: int = 0
     setting_speed_y: int = 0
-    current_hit_area: HitArea = HitArea()
+    current_hit_area: HitArea = field(default_factory=HitArea)
     current_frame: int = 0
     player_number: bool = False
     speed_x: int = 0

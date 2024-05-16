@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from google.protobuf.message import Message
@@ -8,9 +8,9 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class RoundResult(BaseModel):
-    current_round: int
-    remaining_hps: List[int]
-    elapsed_frame: int
+    current_round: int = -1
+    remaining_hps: List[int] = field(default_factory=lambda: [0, 0])
+    elapsed_frame: int = -1
     
     def to_dict(self):
         return {

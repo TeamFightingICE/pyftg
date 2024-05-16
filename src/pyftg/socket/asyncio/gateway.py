@@ -109,7 +109,7 @@ class Gateway(IAsyncGateway):
             for i, stream in enumerate(self.stream_agents):
                 controller = StreamController(self.host, self.port, stream)
                 tasks.append(loop.create_task(controller.run()))
-                logger.info(f"Start Stream controller thread #{i+1}")
+                logger.info(f"Start Stream controller task #{i+1}")
             await asyncio.gather(*tasks)
         except ConnectionRefusedError:
             logger.error("Connection refused by server")

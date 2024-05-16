@@ -26,7 +26,7 @@ class CharacterData(BaseModel):
     action: Action = Action.NEUTRAL
     front: bool = False
     control: bool = False
-    attack_data: AttackData = AttackData()
+    attack_data: AttackData = field(default_factory=AttackData)
     remaining_frame: int = 0
     hit_confirm: bool = False
     graphic_size_x: int = 0
