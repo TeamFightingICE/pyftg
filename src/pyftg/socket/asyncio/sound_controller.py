@@ -48,7 +48,8 @@ class SoundController:
                 elif flag is Flag.PROCESSING:
                     self.sound_ai.get_information(FrameData.from_proto(state.frame_data))
                     
-                    self.sound_ai.processing()
+                    loop = asyncio.get_event_loop()
+                    await loop.run_in_executor(None, self.sound_ai.processing)
                     await self.send_audio_sample(self.sound_ai.audio_sample())
                 elif flag is Flag.ROUND_END:
                     self.sound_ai.round_end(RoundResult.from_proto(state.round_result))

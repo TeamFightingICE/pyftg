@@ -44,7 +44,7 @@ class StreamController:
                 state_packet = await recv_data(self.reader)
                 state: Message = service_pb2.PlayerGameState()
                 state.ParseFromString(state_packet)
-
+                
                 flag = Flag(state.state_flag)
                 if flag is Flag.INITIALIZE:
                     self.stream.initialize(GameData.from_proto(state.game_data))
@@ -58,7 +58,8 @@ class StreamController:
                     if state.HasField("screen_data"):
                         self.stream.get_screen_data(ScreenData.from_proto(state.screen_data))
                     
-                    self.stream.processing()
+                    loop = asyncio.get_event_loop()
+                    await loop.run_in_executor(None, self.stream.processing)
                 elif flag is Flag.ROUND_END:
                     self.stream.round_end(RoundResult.from_proto(state.round_result))
                 elif flag is Flag.GAME_END:

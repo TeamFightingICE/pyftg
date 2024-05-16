@@ -61,8 +61,9 @@ class AIController:
 
                     self.ai.get_information(FrameData.from_proto(state.frame_data), state.is_control)
                     self.ai.get_audio_data(AudioData.from_proto(state.audio_data))
-                    
-                    self.ai.processing()
+
+                    loop = asyncio.get_event_loop()
+                    await loop.run_in_executor(None, self.ai.processing)
                     await self.send_input_key(self.ai.input())
                 elif flag is Flag.ROUND_END:
                     self.ai.round_end(RoundResult.from_proto(state.round_result))
