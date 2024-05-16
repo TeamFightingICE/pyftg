@@ -69,7 +69,6 @@ class AIController:
                 elif flag is Flag.GAME_END:
                     self.ai.round_end(RoundResult.from_proto(state.round_result))
                     self.ai.game_end()
-        
-    async def close(self):
+        self.ai.close()
         self.writer.close()
         await self.writer.wait_closed()

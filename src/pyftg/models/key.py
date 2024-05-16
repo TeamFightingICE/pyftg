@@ -58,7 +58,3 @@ class Key(BaseModel):
             D=proto_obj.D,
             L=proto_obj.L
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return Key(A=False, B=False, C=False, U=False, R=False, D=False, L=False)

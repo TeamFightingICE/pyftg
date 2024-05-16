@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from google.protobuf.message import Message
@@ -8,10 +8,10 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class GameData(BaseModel):
-    max_hps: List[int]
-    max_energies: List[int]
-    character_names: List[str]
-    ai_names: List[str]
+    max_hps: List[int] = field(default_factory=lambda: [0, 0])
+    max_energies: List[int] = field(default_factory=lambda: [0, 0])
+    character_names: List[str] = field(default_factory=lambda: ["", ""])
+    ai_names: List[str] = field(default_factory=lambda: ["", ""])
     
     def get_character_name(self, player: bool):
         return self.character_names[0 if player else 1]
@@ -44,7 +44,3 @@ class GameData(BaseModel):
             character_names=list(proto_obj.character_names),
             ai_names=list(proto_obj.ai_names)
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return GameData(max_hps=[0, 0], max_energies=[0, 0], character_names=["", ""], ai_names=["", ""])

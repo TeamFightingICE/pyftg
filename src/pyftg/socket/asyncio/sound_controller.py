@@ -55,8 +55,6 @@ class SoundController:
                 elif flag is Flag.GAME_END:
                     self.sound_ai.round_end(RoundResult.from_proto(state.round_result))
                     self.sound_ai.game_end()
-
-    async def close(self):
         self.sound_ai.close()
         self.writer.close()
         await self.writer.wait_closed()

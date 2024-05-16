@@ -7,10 +7,10 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class HitArea(BaseModel):
-    left: int
-    right: int
-    top: int
-    bottom: int
+    left: int = 0
+    right: int = 0
+    top: int = 0
+    bottom: int = 0
     
     def to_dict(self):
         return {
@@ -37,7 +37,3 @@ class HitArea(BaseModel):
             top=proto_obj.top,
             bottom=proto_obj.bottom
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return HitArea(left=0, right=0, top=0, bottom=0)

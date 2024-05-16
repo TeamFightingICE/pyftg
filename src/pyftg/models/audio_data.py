@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from google.protobuf.message import Message
@@ -9,9 +9,9 @@ from pyftg.models.fft_data import FFTData
 
 @dataclass
 class AudioData(BaseModel):
-    raw_data_bytes: bytes
-    fft_data: List[FFTData]
-    spectrogram_data_bytes: bytes
+    raw_data_bytes: bytes = b''
+    fft_data: List[FFTData] = field(default_factory=lambda: [FFTData(), FFTData()])
+    spectrogram_data_bytes: bytes = b''
 
     def to_dict(self):
         return {
@@ -35,8 +35,4 @@ class AudioData(BaseModel):
             fft_data=list(map(FFTData.from_proto, proto_obj.fft_data)),
             spectrogram_data_bytes=proto_obj.spectrogram_data_as_bytes
         )
-
-    @classmethod
-    def get_default_instance(cls):
-        return AudioData(raw_data_bytes=b'', fft_data=[FFTData.get_default_instance() for _ in range(2)], spectrogram_data_bytes=b'')
     

@@ -24,11 +24,8 @@ class Gateway(IAsyncGateway):
         self.port = port
         self.registered_agents: dict[str, AIInterface] = dict()
         self.agents: list[AIInterface] = [None, None]
-        self.ais: list[AIController] = [None, None]
         self.sound_agent: SoundGenAIInterface = None
-        self.stream_agent: StreamInterface = None
-        self.sound: SoundController = None
-        self.stream: StreamController = None
+        self.stream_agents: list[StreamInterface] = []
     
     def load_agent(self, ai_names: list[str]):
         if ai_names[0] is None and ai_names[1] is None:
@@ -44,7 +41,7 @@ class Gateway(IAsyncGateway):
         self.sound_agent = agent
 
     def register_stream(self, stream_agent: StreamInterface):
-        self.stream_agent = stream_agent
+        self.stream_agents.append(stream_agent)
 
     async def run_game(self, characters: list[str], agents: list[str], game_number: int):
         for i in range(2):
@@ -52,57 +49,69 @@ class Gateway(IAsyncGateway):
                 agents[i] = None
             elif agents[i] in self.registered_agents:
                 self.agents[i] = self.registered_agents[agents[i]]
+        try:
+            reader, writer = await asyncio.open_connection(self.host, self.port)
 
-        reader, writer = await asyncio.open_connection(self.host, self.port)
+            request: Message = service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1],
+                                                        player_1=agents[0], player_2=agents[1], game_number=game_number)
+            await send_data(writer, b'\x02', with_header=False)  # 2: Run Game
+            await send_data(writer, request.SerializeToString())
+            
+            response_packet = await recv_data(reader)
+            response: Message = service_pb2.RunGameResponse()
+            response.ParseFromString(response_packet)
 
-        request: Message = service_pb2.RunGameRequest(character_1=characters[0], character_2=characters[1],
-                                                      player_1=agents[0], player_2=agents[1], game_number=game_number)
-        await send_data(writer, b'\x02', with_header=False)  # 2: Run Game
-        await send_data(writer, request.SerializeToString())
-        
-        response_packet = await recv_data(reader)
-        response: Message = service_pb2.RunGameResponse()
-        response.ParseFromString(response_packet)
+            if response.status_code is StatusCode.FAILED:
+                logger.error(response.response_message)
+                exit(1)
 
-        if response.status_code is StatusCode.FAILED:
-            logger.error(response.response_message)
-            exit(1)
-
-        writer.close()
-        await writer.wait_closed()
-        await self.start_ai()
+            writer.close()
+            await writer.wait_closed()
+            await self.start_ai()
+        except ConnectionRefusedError:
+            logger.error("Connection refused by server")
+        except ConnectionResetError:
+            logger.info("Connection closed by server")
 
     async def start_ai(self):
-        tasks = list()
-        loop = asyncio.get_event_loop()
-        for i, agent in enumerate(self.agents):
-            if agent:
-                self.ais[i] = AIController(self.host, self.port, agent, i == 0)
-                tasks.append(loop.create_task(self.ais[i].run()))
-                logger.info(f"AI controller for P{i+1} ({agent.name()}) is ready.")
-        await asyncio.gather(*tasks)
+        try:
+            tasks = list()
+            loop = asyncio.get_event_loop()
+            for i, agent in enumerate(self.agents):
+                if agent:
+                    controller = AIController(self.host, self.port, agent, i == 0)
+                    tasks.append(loop.create_task(controller.run()))
+                    logger.info(f"Start P{i+1} AI controller task ({agent.name()})")
+            await asyncio.gather(*tasks)
+        except ConnectionRefusedError:
+            logger.error("Connection refused by server")
+        except ConnectionResetError:
+            logger.info("Connection closed by server")
 
     async def start_sound(self):
-        tasks = list()
-        loop = asyncio.get_event_loop()
-        if self.sound_agent:
-            self.sound = SoundController(self.host, self.port, self.sound_agent)
-            tasks.append(loop.create_task(self.sound.run()))
-            logger.info(f"Sound controller is ready.")
-        await asyncio.gather(*tasks)
+        try:
+            tasks = list()
+            loop = asyncio.get_event_loop()
+            if self.sound_agent:
+                controller = SoundController(self.host, self.port, self.sound_agent)
+                tasks.append(loop.create_task(controller.run()))
+                logger.info(f"Start Sound controller task")
+            await asyncio.gather(*tasks)
+        except ConnectionRefusedError:
+            logger.error("Connection refused by server")
+        except ConnectionResetError:
+            logger.info("Connection closed by server")
 
     async def start_stream(self):
-        tasks = list()
-        loop = asyncio.get_event_loop()
-        if self.stream_agent:
-            self.stream = StreamController(self.host, self.port, self.stream_agent)
-            tasks.append(loop.create_task(self.stream.run()))
-            logger.info(f"Stream controller is ready.")
-        await asyncio.gather(*tasks)
-
-    async def close(self):
-        for ai in self.ais:
-            if ai:
-                await ai.close()
-        if self.sound:
-            await self.sound.close()
+        try:
+            tasks = list()
+            loop = asyncio.get_event_loop()
+            for i, stream in enumerate(self.stream_agents):
+                controller = StreamController(self.host, self.port, stream)
+                tasks.append(loop.create_task(controller.run()))
+                logger.info(f"Start Stream controller thread #{i+1}")
+            await asyncio.gather(*tasks)
+        except ConnectionRefusedError:
+            logger.error("Connection refused by server")
+        except ConnectionResetError:
+            logger.info("Connection closed by server")

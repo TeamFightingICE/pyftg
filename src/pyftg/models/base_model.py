@@ -12,8 +12,3 @@ class BaseModel(ABC):
     @abstractmethod
     def from_dict(cls, data_obj: dict):
         pass
-
-    @classmethod
-    @abstractmethod
-    def get_default_instance(cls):
-        pass

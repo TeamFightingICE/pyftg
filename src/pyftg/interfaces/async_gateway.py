@@ -37,7 +37,3 @@ class IAsyncGateway(ABC):
     @abstractmethod
     async def start_stream(self):
         pass
-
-    @abstractmethod
-    async def close(self):
-        pass

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from google.protobuf.message import Message
@@ -11,30 +11,30 @@ from pyftg.models.enums.state import State
 
 @dataclass
 class CharacterData(BaseModel):
-    player_number: bool
-    hp: int
-    energy: int
-    x: int
-    y: int
-    left: int
-    right: int
-    top: int
-    bottom: int
-    speed_x: int
-    speed_y: int
-    state: State
-    action: Action
-    front: bool
-    control: bool
-    attack_data: AttackData
-    remaining_frame: int
-    hit_confirm: bool
-    graphic_size_x: int
-    graphic_size_y: int
-    graphic_adjust_x: int
-    hit_count: int
-    last_hit_frame: int
-    projectile_attack: List[AttackData]
+    player_number: bool = False
+    hp: int = 0
+    energy: int = 0
+    x: int = 0
+    y: int = 0
+    left: int = 0
+    right: int = 0
+    top: int = 0
+    bottom: int = 0
+    speed_x: int = 0
+    speed_y: int = 0
+    state: State = State.STAND
+    action: Action = Action.NEUTRAL
+    front: bool = False
+    control: bool = False
+    attack_data: AttackData = AttackData()
+    remaining_frame: int = 0
+    hit_confirm: bool = False
+    graphic_size_x: int = 0
+    graphic_size_y: int = 0
+    graphic_adjust_x: int = 0
+    hit_count: int = 0
+    last_hit_frame: int = 0
+    projectile_attack: List[AttackData] = field(default_factory=lambda: [AttackData()] * 3)
     
     def to_dict(self):
         return {
@@ -120,14 +120,4 @@ class CharacterData(BaseModel):
             hit_count=proto_obj.hit_count,
             last_hit_frame=proto_obj.last_hit_frame,
             projectile_attack=[AttackData.from_proto(attack) for attack in proto_obj.projectile_attack]
-        )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return CharacterData(
-            player_number=False, hp=0, energy=0, x=0, y=0, left=0, right=0, top=0, bottom=0,
-            speed_x=0, speed_y=0, state=State.STAND, action=Action.NEUTRAL, front=False, control=False,
-            attack_data=AttackData.get_default_instance(), remaining_frame=0, hit_confirm=False,
-            graphic_size_x=0, graphic_size_y=0, graphic_adjust_x=0, hit_count=0, last_hit_frame=0,
-            projectile_attack=[AttackData.get_default_instance()] * 3
         )

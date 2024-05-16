@@ -9,6 +9,18 @@ from pyftg.models.screen_data import ScreenData
 
 class StreamInterface(ABC):
     @abstractmethod
+    def get_frame_data_flag(self) -> bool:
+        pass
+
+    @abstractmethod
+    def get_audio_data_flag(self) -> bool:
+        pass
+
+    @abstractmethod
+    def get_screen_data_flag(self) -> bool:
+        pass
+
+    @abstractmethod
     def initialize(self, game_data: GameData) -> None:
         pass
 

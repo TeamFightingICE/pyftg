@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional
 
 from google.protobuf.message import Message
@@ -10,12 +10,12 @@ from pyftg.models.character_data import CharacterData
 
 @dataclass
 class FrameData(BaseModel):
-    character_data: List[Optional[CharacterData]]
-    current_frame_number: int
-    current_round: int
-    projectile_data: List[AttackData]
-    empty_flag: bool
-    front: List[bool]
+    character_data: List[Optional[CharacterData]] = field(default_factory=lambda: [None, None])
+    current_frame_number: int = -1
+    current_round: int = -1
+    projectile_data: List[AttackData] = field(default_factory=list)
+    empty_flag: bool = True
+    front: List[bool] = field(default_factory=lambda: [False, False])
 
     def is_front(self, player: bool) -> bool:
         if len(self.front) < 2:
@@ -64,11 +64,4 @@ class FrameData(BaseModel):
             projectile_data=list(map(AttackData.from_proto, proto_obj.projectile_data)),
             empty_flag=proto_obj.empty_flag,
             front=list(proto_obj.front)
-        )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return FrameData(
-            character_data=[CharacterData.get_default_instance() for _ in range(2)], current_frame_number=0,
-            current_round=0, projectile_data=[], empty_flag=True, front=[False, False]
         )

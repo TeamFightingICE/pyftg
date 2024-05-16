@@ -8,31 +8,31 @@ from pyftg.models.hit_area import HitArea
 
 @dataclass
 class AttackData(BaseModel):
-    setting_hit_area: HitArea
-    setting_speed_x: int
-    setting_speed_y: int
-    current_hit_area: HitArea
-    current_frame: int
-    player_number: bool
-    speed_x: int
-    speed_y: int
-    start_up: int
-    active: int
-    hit_damage: int
-    guard_damage: int
-    start_add_energy: int
-    hit_add_energy: int
-    guard_add_energy: int
-    give_energy: int
-    impact_x: int
-    impact_y: int
-    give_guard_recov: int
-    attack_type: int
-    down_prop: bool
-    is_projectile: bool
-    is_live: bool
-    empty_flag: bool
-    identifier: str
+    setting_hit_area: HitArea = HitArea()
+    setting_speed_x: int = 0
+    setting_speed_y: int = 0
+    current_hit_area: HitArea = HitArea()
+    current_frame: int = 0
+    player_number: bool = False
+    speed_x: int = 0
+    speed_y: int = 0
+    start_up: int = 0
+    active: int = 0
+    hit_damage: int = 0
+    guard_damage: int = 0
+    start_add_energy: int = 0
+    hit_add_energy: int = 0
+    guard_add_energy: int = 0
+    give_energy: int = 0
+    impact_x: int = 0
+    impact_y: int = 0
+    give_guard_recov: int = 0
+    attack_type: int = 0
+    down_prop: bool = False
+    is_projectile: bool = False
+    is_live: bool = False
+    empty_flag: bool = True
+    identifier: str = ''
     
     def to_dict(self):
         return {
@@ -121,15 +121,4 @@ class AttackData(BaseModel):
             is_live=proto_obj.is_live,
             empty_flag=proto_obj.empty_flag,
             identifier=proto_obj.identifier
-        )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return AttackData(
-            setting_hit_area=HitArea.get_default_instance(), setting_speed_x=0, setting_speed_y=0,
-            current_hit_area=HitArea.get_default_instance(), current_frame=0, player_number=False,
-            speed_x=0, speed_y=0, start_up=0, active=0, hit_damage=0, guard_damage=0,
-            start_add_energy=0, hit_add_energy=0, guard_add_energy=0, give_energy=0,
-            impact_x=0, impact_y=0, give_guard_recov=0, attack_type=0, down_prop=False, 
-            is_live=False, is_projectile=False, empty_flag=True, identifier=''
         )

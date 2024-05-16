@@ -52,3 +52,7 @@ class AIInterface(ABC):
     @abstractmethod
     def game_end(self):
         pass
+
+    @abstractmethod
+    def close(self):
+        pass

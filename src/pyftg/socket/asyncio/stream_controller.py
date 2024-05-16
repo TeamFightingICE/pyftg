@@ -28,7 +28,11 @@ class StreamController:
     
     async def initialize(self) -> None:
         self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
+        request: Message = service_pb2.SpectateRequest(interval=1, frame_data_flag=self.stream.get_frame_data_flag(), 
+                                                       audio_data_flag=self.stream.get_audio_data_flag(),
+                                                       screen_data_flag=self.stream.get_screen_data_flag())
         await send_data(self.writer, INIT_STREAM, with_header=False)
+        await send_data(self.writer, request.SerializeToString())
 
     async def run(self):
         await self.initialize()
@@ -45,9 +49,14 @@ class StreamController:
                 if flag is Flag.INITIALIZE:
                     self.stream.initialize(GameData.from_proto(state.game_data))
                 elif flag is Flag.PROCESSING:
-                    self.stream.get_information(FrameData.from_proto(state.frame_data))
-                    self.stream.get_audio_data(AudioData.from_proto(state.audio_data))
-                    self.stream.get_screen_data(ScreenData.from_proto(state.screen_data))
+                    if state.HasField("frame_data"):
+                        self.stream.get_information(FrameData.from_proto(state.frame_data))
+
+                    if state.HasField("audio_data"):
+                        self.stream.get_audio_data(AudioData.from_proto(state.audio_data))
+                        
+                    if state.HasField("screen_data"):
+                        self.stream.get_screen_data(ScreenData.from_proto(state.screen_data))
                     
                     self.stream.processing()
                 elif flag is Flag.ROUND_END:
@@ -55,7 +64,5 @@ class StreamController:
                 elif flag is Flag.GAME_END:
                     self.stream.round_end(RoundResult.from_proto(state.round_result))
                     self.stream.game_end()
-        
-    async def close(self):
         self.writer.close()
         await self.writer.wait_closed()

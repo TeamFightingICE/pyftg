@@ -8,7 +8,7 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class ScreenData(BaseModel):
-    display_bytes: bytes
+    display_bytes: bytes = b''
 
     def to_dict(self):
         return {
@@ -29,7 +29,3 @@ class ScreenData(BaseModel):
         return ScreenData(
             display_bytes=display_bytes
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return ScreenData(display_bytes=b'')
