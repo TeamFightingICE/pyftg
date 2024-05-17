@@ -168,7 +168,7 @@ class Gateway:
         except ConnectionResetError:
             logger.info("Connection closed by server")
 
-    def close(self):
+    async def close(self):
         """
         Close the gateway.
         """
