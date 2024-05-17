@@ -8,9 +8,22 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class RoundResult(BaseModel):
+    """
+    RoundResult (BaseModel): Round result data class.
+    """
+
     current_round: int
+    """
+    current_round (int): Current round number.
+    """
     remaining_hps: List[int]
+    """
+    remaining_hps (List[int]): Remaining hit points for two players.
+    """
     elapsed_frame: int
+    """
+    elapsed_frame (int): Elapsed frame number.
+    """
     
     def to_dict(self):
         return {

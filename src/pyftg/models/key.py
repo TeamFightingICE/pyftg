@@ -7,15 +7,43 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class Key(BaseModel):
+    """
+    Key (BaseModel): Key data class.
+    """
+
     A: bool = False
+    """
+    A (bool): A key state. True if pressed, False otherwise
+    """
     B: bool = False
+    """
+    B (bool): B key state. True if pressed, False otherwise
+    """
     C: bool = False
+    """
+    C (bool): C key state. True if pressed, False otherwise
+    """
     U: bool = False
+    """
+    U (bool): U key state. True if pressed, False otherwise
+    """
     R: bool = False
+    """
+    R (bool): R key state. True if pressed, False otherwise
+    """
     D: bool = False
+    """
+    D (bool): D key state. True if pressed, False otherwise
+    """
     L: bool = False
+    """
+    L (bool): L key state. True if pressed, False otherwise
+    """
 
     def empty(self):
+        """
+        Reset all key states to False.
+        """
         self.A = False
         self.B = False
         self.C = False

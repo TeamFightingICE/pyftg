@@ -1,4 +1,3 @@
-import uuid
 from dataclasses import dataclass
 
 from google.protobuf.message import Message
@@ -9,31 +8,112 @@ from pyftg.models.hit_area import HitArea
 
 @dataclass
 class AttackData(BaseModel):
+    """
+    AttackData (BaseModel): Attack data class.
+    """
+
     setting_hit_area: HitArea
+    """
+    setting_hit_area (HitArea): The default setting of this attack hit box.
+    """
     setting_speed_x: int
+    """
+    setting_speed_x (int): The absolute value of the horizontal speed of the attack hit box (zero means the attack hit box will track the character).
+    """
     setting_speed_y: int
+    """
+    setting_speed_y (int): The absolute value of the vertical speed of the attack hit box (zero means the attack hit box will track the character).
+    """
     current_hit_area: HitArea
+    """
+    current_hit_area (HitArea): The information of this attack hit box in the current frame.
+    """
     current_frame: int
+    """
+    current_frame (int): The number of frames since this attack was used.
+    """
     player_number: bool
+    """
+    player_number (bool): Which player the attack belongs to. True for player 1, False for player 2.
+    """
     speed_x: int
+    """
+    speed_x (int): The horizontal speed of the attack hit box (minus when moving left and plus when moving right).
+    """
     speed_y: int
+    """
+    speed_y (int): The vertical speed of the attack hit box (minus when moving up and plus when moving down).
+    """
     start_up: int
+    """
+    start_up (int): The number of frames before the attack becomes active.
+    """
     active: int
+    """
+    active (int): The number of frames the attack is active.
+    """
     hit_damage: int
+    """
+    hit_damage (int): The damage to the unguarded opponent hit by this skill.
+    """
     guard_damage: int
+    """
+    guard_damage (int): The damage to the guarded opponent hit by this skill.
+    """
     start_add_energy: int
+    """
+    start_add_energy (int): The energy added to the character when it uses this skill.
+    """
     hit_add_energy: int
+    """
+    hit_add_energy (int): The energy added to the character when this skill hits the opponent.
+    """
     guard_add_energy: int
+    """
+    guard_add_energy (int): The energy added to the character when this skill is blocked by the opponent.
+    """
     give_energy: int
+    """
+    give_energy (int): The energy added to the opponent when it is hit by this skill.
+    """
     impact_x: int
+    """
+    impact_x (int): The change in the horizontal speed of the opponent when it is hit by this skill.
+    """
     impact_y: int
+    """
+    impact_y (int): The change in the vertical speed of the opponent when it is hit by this skill.
+    """
     give_guard_recov: int
+    """
+    give_guard_recov (int): The number of frames that the guarded opponent needs to resume to his normal status after being hit by this skill.
+    """
     attack_type: int
+    """
+    attack_type (int): The value of the attack type: 1 = high, 2 = middle, 3 = low, 4 = throw.
+    """
     down_prop: bool
+    """
+    down_prop (bool): The flag whether this skill can push down the opponent when hit.
+    True if the skill can push down the opponent, otherwise False.
+    """
     is_projectile: bool
+    """
+    is_projectile (bool): The flag whether this skill is projectile or not.
+    True if the skill is projectile, otherwise False.
+    """
     is_live: bool
+    """
+    is_live (bool): Whether the attack is live. True if the attack is live, otherwise False.
+    """
     empty_flag: bool
+    """
+    empty_flag (bool): Whether the attack is empty. True if the attack is empty, otherwise False.
+    """
     identifier: str
+    """
+    identifier (str): Unique identifier for the attack.
+    """
     
     def to_dict(self):
         return {

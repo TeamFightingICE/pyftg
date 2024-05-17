@@ -8,10 +8,26 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class GameData(BaseModel):
+    """
+    GameData (BaseModel): Game data class.
+    """
+
     max_hps: List[int]
+    """
+    max_hps (List[int]): The values of both characters' HP limits. Index 0 is for player 1, and index 1 is for player 2.
+    """
     max_energies: List[int]
+    """
+    max_energies (List[int]): The values of both characters' energy limits. Index 0 is for player 1, and index 1 is for player 2.
+    """
     character_names: List[str]
+    """
+    character_names (List[str]): The character names for two players. Index 0 is for player 1, and index 1 is for player 2.
+    """
     ai_names: List[str]
+    """
+    ai_names (List[str]): The AI names for two players. Index 0 is for player 1, and index 1 is for player 2.
+    """
     
     def get_character_name(self, player: bool):
         return self.character_names[0 if player else 1]

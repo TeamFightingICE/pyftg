@@ -7,10 +7,26 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class HitArea(BaseModel):
+    """
+    HitArea (BaseModel): Hit area data class.
+    """
+
     left: int
+    """
+    left (int): Left boundary.
+    """
     right: int
+    """
+    right (int): Right boundary.
+    """
     top: int
+    """
+    top (int): Top boundary.
+    """
     bottom: int
+    """
+    bottom (int): Bottom boundary.
+    """
     
     def to_dict(self):
         return {

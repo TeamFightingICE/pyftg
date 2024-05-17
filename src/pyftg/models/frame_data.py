@@ -10,12 +10,37 @@ from pyftg.models.character_data import CharacterData
 
 @dataclass
 class FrameData(BaseModel):
+    """
+    FrameData (BaseModel): Frame data class.
+    """
+
     character_data: List[Optional[CharacterData]]
+    """
+    character_data (List[Optional[CharacterData]]): The character's data of both characters.
+    Index 0 is player 1, and index 1 is player 2.
+    """
     current_frame_number: int
+    """
+    current_frame_number (int): The current frame of the round.
+    """
     current_round: int
+    """
+    current_round (int): The current round number.
+    """
     projectile_data: List[AttackData]
+    """
+    projectile_data (List[AttackData]): The projectile data of both characters.
+    """
     empty_flag: bool
+    """
+    empty_flag (bool): If this value is true, no data are available or they are dummy data.
+    """
     front: List[bool]
+    """
+    front (List[bool]): The direction the character is facing for two players.\n
+    Index 0 is player 1, and index 1 is player 2.\n
+    True if the player is facing right, otherwise False.
+    """
 
     def is_front(self, player: bool) -> bool:
         if len(self.front) < 2:
