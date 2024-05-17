@@ -7,8 +7,18 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class FFTData(BaseModel):
+    """
+    FFTData (BaseModel): FFT data class.
+    """
+
     real_data_bytes: bytes = b''
+    """
+    real_data_bytes (bytes): Real part of the FFT data.
+    """
     imaginary_data_bytes: bytes = b''
+    """
+    imaginary_data_bytes (bytes): Imaginary part of the FFT data.
+    """
     
     def to_dict(self):
         return {

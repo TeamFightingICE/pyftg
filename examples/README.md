@@ -14,7 +14,7 @@ pip install -r requirements.txt
 ```
 
 ## Instruction on using Main_PyAIvsPyAI.py
-- Boot DareFightingICE with option `--enable-auto`.
+- Boot DareFightingICE with option `--pyftg-mode`.
 - If both of AI are implemented in Python, modify lines 16 to 20 of `Main_PyAIvsPyAI.py`.
 - The following example shows how to use KickAI as player 1 and DisplayInfo as player 2.
 ```

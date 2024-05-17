@@ -9,9 +9,22 @@ from pyftg.models.fft_data import FFTData
 
 @dataclass
 class AudioData(BaseModel):
+    """
+    AudioData (BaseModel): Audio data class.
+    """
+
     raw_data_bytes: bytes = b''
+    """
+    raw_data_bytes (bytes): Raw audio data in wave format with 2 channels and 800 samples.
+    """
     fft_data: List[FFTData] = field(default_factory=lambda: [FFTData(), FFTData()])
+    """
+    fft_data (List[FFTData]): FFT data for two channels.
+    """
     spectrogram_data_bytes: bytes = b''
+    """
+    spectrogram_data_bytes (bytes): Spectrogram data bytes.
+    """
 
     def to_dict(self):
         return {
