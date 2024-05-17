@@ -14,15 +14,15 @@ class RoundResult(BaseModel):
 
     current_round: int
     """
-    current_round (int): Current round number.
+    current_round (int): The current round number.
     """
     remaining_hps: List[int]
     """
-    remaining_hps (List[int]): Remaining hit points for two players.
+    remaining_hps (List[int]): Remaining hit points for both players. Index 0 is player 1, and index 1 is player 2.
     """
     elapsed_frame: int
     """
-    elapsed_frame (int): Elapsed frame number.
+    elapsed_frame (int): The number of elapsed frames.
     """
     
     def to_dict(self):

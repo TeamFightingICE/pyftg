@@ -13,31 +13,31 @@ class Key(BaseModel):
 
     A: bool = False
     """
-    A (bool): A key state. True if pressed, False otherwise
+    A (bool): A key state. True if pressed, otherwise False
     """
     B: bool = False
     """
-    B (bool): B key state. True if pressed, False otherwise
+    B (bool): B key state. True if pressed, otherwise False
     """
     C: bool = False
     """
-    C (bool): C key state. True if pressed, False otherwise
+    C (bool): C key state. True if pressed, otherwise False
     """
     U: bool = False
     """
-    U (bool): U key state. True if pressed, False otherwise
+    U (bool): U key state. True if pressed, otherwise False
     """
     R: bool = False
     """
-    R (bool): R key state. True if pressed, False otherwise
+    R (bool): R key state. True if pressed, otherwise False
     """
     D: bool = False
     """
-    D (bool): D key state. True if pressed, False otherwise
+    D (bool): D key state. True if pressed, otherwise False
     """
     L: bool = False
     """
-    L (bool): L key state. True if pressed, False otherwise
+    L (bool): L key state. True if pressed, otherwise False
     """
 
     def empty(self):

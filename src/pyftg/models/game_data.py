@@ -22,11 +22,11 @@ class GameData(BaseModel):
     """
     character_names: List[str]
     """
-    character_names (List[str]): The character names for two players. Index 0 is for player 1, and index 1 is for player 2.
+    character_names (List[str]): The character names for both players. Index 0 is for player 1, and index 1 is for player 2.
     """
     ai_names: List[str]
     """
-    ai_names (List[str]): The AI names for two players. Index 0 is for player 1, and index 1 is for player 2.
+    ai_names (List[str]): The AI names for both players. Index 0 is for player 1, and index 1 is for player 2.
     """
     
     def get_character_name(self, player: bool):

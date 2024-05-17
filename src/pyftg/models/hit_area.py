@@ -13,19 +13,19 @@ class HitArea(BaseModel):
 
     left: int
     """
-    left (int): Left boundary.
+    left (int): The most left x coordinate of the hit box.
     """
     right: int
     """
-    right (int): Right boundary.
+    right (int): The most right x coordinate of the hit box.
     """
     top: int
     """
-    top (int): Top boundary.
+    top (int): The most top y coordinate of the hit box.
     """
     bottom: int
     """
-    bottom (int): Bottom boundary.
+    bottom (int): The most bottom y coordinate of the hit box.
     """
     
     def to_dict(self):
