@@ -15,7 +15,7 @@ class AudioData(BaseModel):
 
     raw_data_bytes: bytes
     """
-    raw_data_bytes (bytes): Raw audio data in wave format with 2 channels and 800 samples.
+    raw_data_bytes (bytes): Raw audio data in wave format with 2 channels and 1024 samples (800 actual samples and padded with zeros).
     """
     fft_data: List[FFTData]
     """
