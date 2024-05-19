@@ -7,10 +7,26 @@ from pyftg.models.base_model import BaseModel
 
 @dataclass
 class HitArea(BaseModel):
+    """
+    HitArea (BaseModel): Hit area data class.
+    """
+
     left: int
+    """
+    left (int): The most left x coordinate of the hit box.
+    """
     right: int
+    """
+    right (int): The most right x coordinate of the hit box.
+    """
     top: int
+    """
+    top (int): The most top y coordinate of the hit box.
+    """
     bottom: int
+    """
+    bottom (int): The most bottom y coordinate of the hit box.
+    """
     
     def to_dict(self):
         return {

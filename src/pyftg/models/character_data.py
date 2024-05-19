@@ -11,30 +11,108 @@ from pyftg.models.enums.state import State
 
 @dataclass
 class CharacterData(BaseModel):
+    """
+    CharacterData (BaseModel): Character data class.
+    """
+
     player_number: bool
+    """
+    player_number (bool): The character side flag. True for player 1, False for player 2.
+    """
     hp: int
+    """
+    hp (int): The character's HP.
+    """
     energy: int
+    """
+    energy (int): The character's energy.
+    """
     x: int
+    """
+    x (int): The character graphic's center x-coordinate.
+    """
     y: int
+    """
+    y (int): The character graphic's center y-coordinate.
+    """
     left: int
+    """
+    left (int): The character's hit box's most-left x-coordinate.
+    """
     right: int
+    """
+    right (int): The character's hit box's most-right x-coordinate.
+    """
     top: int
+    """
+    top (int): The character's hit box's most-top y-coordinate.
+    """
     bottom: int
+    """
+    bottom (int): The character's hit box's most-bottom y-coordinate.
+    """
     speed_x: int
+    """
+    speed_x (int): The character's horizontal speed.
+    """
     speed_y: int
+    """
+    speed_y (int): The character's vertical speed.
+    """
     state: State
+    """
+    state (State): The character's state: STAND / CROUCH / AIR / DOWN.
+    """
     action: Action
+    """
+    action (Action): The character's action.
+    """
     front: bool
+    """
+    front (bool): The character's facing direction. True if facing right, otherwise False.
+    """
     control: bool
+    """
+    control (bool): The flag whether this character can run a new motion with the motion's command.
+    True if the character can run a new motion, otherwise False.
+    """
     attack_data: AttackData
+    """
+    attack_data (AttackData): The attack data that the character is using.
+    """
     remaining_frame: int
+    """
+    remaining_frame (int): The number of frames that the character needs to resume to its normal status.
+    """
     hit_confirm: bool
+    """
+    hit_confirm (bool): The flag whether the motion hits the opponent or not.
+    True if the motion hits the opponent, otherwise False.
+    """
     graphic_size_x: int
+    """
+    graphic_size_x (int): The character's graphic width.
+    """
     graphic_size_y: int
+    """
+    graphic_size_y (int): The character's graphic height.
+    """
     graphic_adjust_x: int
+    """
+    graphic_adjust_x (int): The amount of movement in the horizontal direction used to adjust the x-coordinate when determining the direction of the character.
+    """
     hit_count: int
+    """
+    hit_count (int): The continuous hit count of attacks used by this character.
+    """
     last_hit_frame: int
+    """
+    last_hit_frame (int): The frame number of the last frame that an attack used by this character hit the opponent.
+    """
     projectile_attack: List[AttackData]
+    """
+    projectile_attack (List[AttackData]): List of projectile attacks used by this character.
+    """
     
     def to_dict(self):
         return {
