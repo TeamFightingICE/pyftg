@@ -21,16 +21,18 @@ INIT_STREAM = b'\x04'
 
 
 class StreamController:
-    def __init__(self, host: str, port: int, stream: StreamInterface):
+    def __init__(self, host: str, port: int, stream: StreamInterface, keep_alive: bool):
         self.host = host
         self.port = port
         self.stream = stream
+        self.keep_alive = keep_alive
     
     async def initialize(self) -> None:
         self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
         request: Message = service_pb2.SpectateRequest(interval=1, frame_data_flag=self.stream.get_frame_data_flag(), 
                                                        audio_data_flag=self.stream.get_audio_data_flag(),
-                                                       screen_data_flag=self.stream.get_screen_data_flag())
+                                                       screen_data_flag=self.stream.get_screen_data_flag(),
+                                                       keep_alive=self.keep_alive)
         await send_data(self.writer, INIT_STREAM, with_header=False)
         await send_data(self.writer, request.SerializeToString())
 

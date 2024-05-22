@@ -134,7 +134,7 @@ class Gateway:
         except ConnectionResetError:
             logger.info("Connection closed by server")
 
-    async def start_sound(self):
+    async def start_sound(self, keep_alive: bool = False):
         """
         Start sound generative AI controller.
         """
@@ -142,7 +142,7 @@ class Gateway:
             tasks: List[Task] = []
             loop = asyncio.get_event_loop()
             if self.sound_agent:
-                controller = SoundController(self.host, self.port, self.sound_agent)
+                controller = SoundController(self.host, self.port, self.sound_agent, keep_alive)
                 tasks.append(loop.create_task(controller.run()))
                 logger.info(f"Start Sound controller task")
             await asyncio.gather(*tasks)
@@ -151,7 +151,7 @@ class Gateway:
         except ConnectionResetError:
             logger.info("Connection closed by server")
 
-    async def start_stream(self):
+    async def start_stream(self, keep_alive: bool = False):
         """
         Start stream controller.
         """
@@ -159,7 +159,7 @@ class Gateway:
             tasks: List[Task] = []
             loop = asyncio.get_event_loop()
             for i, stream in enumerate(self.stream_agents):
-                controller = StreamController(self.host, self.port, stream)
+                controller = StreamController(self.host, self.port, stream, keep_alive)
                 tasks.append(loop.create_task(controller.run()))
                 logger.info(f"Start Stream controller task #{i+1}")
             await asyncio.gather(*tasks)

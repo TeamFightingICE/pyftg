@@ -19,14 +19,17 @@ INIT_SOUND_GENAI = b'\x03'
 
 
 class SoundController:
-    def __init__(self, host: str, port: int, sound_ai: SoundGenAIInterface):
+    def __init__(self, host: str, port: int, sound_ai: SoundGenAIInterface, keep_alive: bool):
         self.host = host
         self.port = port
         self.sound_ai = sound_ai
+        self.keep_alive = keep_alive
 
     async def initialize(self):
         self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
+        request: Message = service_pb2.SpectateRequest(keep_alive=self.keep_alive)
         await send_data(self.writer, INIT_SOUND_GENAI, with_header=False)
+        await send_data(self.writer, request.SerializeToString())
 
     async def send_audio_sample(self, audio_sample: bytes) -> None:
         await send_data(self.writer, audio_sample)
