@@ -116,6 +116,18 @@ class Gateway:
         except ConnectionResetError:
             logger.info("Connection closed by server")
 
+    async def close_game(self):
+        """
+        Sends a request to close the game.
+        """
+        try:
+            _, writer = await asyncio.open_connection(self.host, self.port)
+            await send_data(writer, b'\x05', with_header=False)  # 5: Close Game
+            writer.close()
+            await writer.wait_closed()
+        except ConnectionRefusedError:
+            logger.error("Connection refused by server")
+
     async def start_ai(self):
         """
         Start AI controller.
