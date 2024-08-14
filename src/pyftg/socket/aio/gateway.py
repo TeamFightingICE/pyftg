@@ -108,9 +108,12 @@ class Gateway:
                 logger.error(response.response_message)
                 exit(1)
 
+            ai_task = self.start_ai()
+            run_game_task = recv_data(reader, n=1)
+            await asyncio.gather(ai_task, run_game_task)
+
             writer.close()
             await writer.wait_closed()
-            await self.start_ai()
         except ConnectionRefusedError:
             logger.error("Connection refused by server")
         except ConnectionResetError:
