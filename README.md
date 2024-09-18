@@ -28,3 +28,12 @@ await gateway.close()
 ```
 
 Please refer to the examples provided in the `examples` directory for more information.
+
+# For developer only
+Increase version number in pyproject.toml
+Build project
+```sh
+python -m build
+```
+Push project to pypi
+twine upload dist/*
