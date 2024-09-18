@@ -30,7 +30,8 @@ await gateway.close()
 Please refer to the examples provided in the `examples` directory for more information.
 
 # For developer only
-Please refer to this (link)[https://twine.readthedocs.io/en/stable/]
+Please refer to this [link](https://twine.readthedocs.io/en/stable/).
+
 Increase version number in pyproject.toml
 Build project
 ```sh
