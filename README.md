@@ -38,7 +38,7 @@ Please refer to this [link](https://twine.readthedocs.io/en/stable/).
 ```sh
 python -m build
 ```
-2. Push project to pypi
+3. Push project to pypi
 ```sh
 twine upload dist/*
 ```
