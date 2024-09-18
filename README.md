@@ -32,12 +32,13 @@ Please refer to the examples provided in the `examples` directory for more infor
 # For developer only
 Please refer to this [link](https://twine.readthedocs.io/en/stable/).
 
-Increase version number in pyproject.toml
-Build project
+1. Increase version number in pyproject.toml
+
+1. Build project
 ```sh
 python -m build
 ```
-Push project to pypi
+2. Push project to pypi
 ```sh
 twine upload dist/*
 ```
