@@ -11,19 +11,19 @@ class HitArea(BaseModel):
     HitArea (BaseModel): Hit area data class.
     """
 
-    left: int
+    left: int = 0
     """
     left (int): The most left x coordinate of the hit box.
     """
-    right: int
+    right: int = 0
     """
     right (int): The most right x coordinate of the hit box.
     """
-    top: int
+    top: int = 0
     """
     top (int): The most top y coordinate of the hit box.
     """
-    bottom: int
+    bottom: int = 0
     """
     bottom (int): The most bottom y coordinate of the hit box.
     """
@@ -53,7 +53,3 @@ class HitArea(BaseModel):
             top=proto_obj.top,
             bottom=proto_obj.bottom
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return HitArea(left=0, right=0, top=0, bottom=0)

@@ -11,11 +11,11 @@ class FFTData(BaseModel):
     FFTData (BaseModel): FFT data class.
     """
 
-    real_data_bytes: bytes
+    real_data_bytes: bytes = b''
     """
     real_data_bytes (bytes): Real part of the FFT data.
     """
-    imaginary_data_bytes: bytes
+    imaginary_data_bytes: bytes = b''
     """
     imaginary_data_bytes (bytes): Imaginary part of the FFT data.
     """
@@ -39,7 +39,3 @@ class FFTData(BaseModel):
             real_data_bytes=proto_obj.real_data_as_bytes,
             imaginary_data_bytes=proto_obj.imaginary_data_as_bytes
         )
-
-    @classmethod
-    def get_default_instance(cls):
-        return FFTData(real_data_bytes=b'', imaginary_data_bytes=b'')

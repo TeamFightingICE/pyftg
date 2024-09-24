@@ -27,14 +27,3 @@ class BaseModel(ABC):
             BaseModel: Data class created from dictionary.
         """
         pass
-
-    @classmethod
-    @abstractmethod
-    def get_default_instance(cls):
-        """
-        Get default instance of the data class.
-
-        Returns:
-            BaseModel: Default instance of the data class.
-        """
-        pass

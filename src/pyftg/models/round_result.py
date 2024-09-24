@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from google.protobuf.message import Message
@@ -12,15 +12,15 @@ class RoundResult(BaseModel):
     RoundResult (BaseModel): Round result data class.
     """
 
-    current_round: int
+    current_round: int = -1
     """
     current_round (int): The current round number.
     """
-    remaining_hps: List[int]
+    remaining_hps: List[int] = field(default_factory=lambda: [0, 0])
     """
     remaining_hps (List[int]): Remaining hit points for both players. Index 0 is player 1, and index 1 is player 2.
     """
-    elapsed_frame: int
+    elapsed_frame: int = -1
     """
     elapsed_frame (int): The number of elapsed frames.
     """
@@ -47,7 +47,3 @@ class RoundResult(BaseModel):
             remaining_hps=list(map(int, proto_obj.remaining_hps)),
             elapsed_frame=proto_obj.elapsed_frame
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return RoundResult(current_round=0, remaining_hps=[0, 0], elapsed_frame=0)

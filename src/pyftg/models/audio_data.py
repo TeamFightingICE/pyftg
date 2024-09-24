@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from google.protobuf.message import Message
@@ -13,15 +13,15 @@ class AudioData(BaseModel):
     AudioData (BaseModel): Audio data class.
     """
 
-    raw_data_bytes: bytes
+    raw_data_bytes: bytes = b''
     """
     raw_data_bytes (bytes): Raw audio data in wave format with 2 channels and 1024 samples (800 actual samples and padded with zeros).
     """
-    fft_data: List[FFTData]
+    fft_data: List[FFTData] = field(default_factory=lambda: [FFTData(), FFTData()])
     """
     fft_data (List[FFTData]): FFT data for two channels.
     """
-    spectrogram_data_bytes: bytes
+    spectrogram_data_bytes: bytes = b''
     """
     spectrogram_data_bytes (bytes): Spectrogram data bytes.
     """
@@ -48,8 +48,3 @@ class AudioData(BaseModel):
             fft_data=list(map(FFTData.from_proto, proto_obj.fft_data)),
             spectrogram_data_bytes=proto_obj.spectrogram_data_as_bytes
         )
-
-    @classmethod
-    def get_default_instance(cls):
-        return AudioData(raw_data_bytes=b'', fft_data=[FFTData.get_default_instance() for _ in range(2)], spectrogram_data_bytes=b'')
-    

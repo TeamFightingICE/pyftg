@@ -12,7 +12,7 @@ class ScreenData(BaseModel):
     ScreenData (BaseModel): Screen data class.
     """
 
-    display_bytes: bytes
+    display_bytes: bytes = b''
     """
     display_bytes (bytes): Display data bytes.
     """
@@ -36,7 +36,3 @@ class ScreenData(BaseModel):
         return ScreenData(
             display_bytes=display_bytes
         )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return ScreenData(display_bytes=b'')

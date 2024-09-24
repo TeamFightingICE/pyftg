@@ -62,12 +62,13 @@ class OneSecondAI(AIInterface):
         if self.current_frame_number % 60 == 0 and not self.is_processing:
             self.is_processing = True
             self.process_thread = Thread(target=self.processing_thread)
+            self.process_thread.daemon = True
             self.process_thread.start()
 
     def processing_thread(self):
         logger.info(f"processing start at frame: {self.current_frame_number}")
         time.sleep(0.9)  # simulate processing
-        self.cc.command_call("STAND_B")
+        self.cc.command_call("B")
         self.is_processing = False
         logger.info(f"processing end at frame: {self.current_frame_number}")
 
@@ -76,3 +77,6 @@ class OneSecondAI(AIInterface):
     
     def game_end(self):
         logger.info("game end")
+
+    def close(self):
+        pass

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional
 
 from google.protobuf.message import Message
@@ -14,28 +14,28 @@ class FrameData(BaseModel):
     FrameData (BaseModel): Frame data class.
     """
 
-    character_data: List[Optional[CharacterData]]
+    character_data: List[Optional[CharacterData]] = field(default_factory=lambda: [None, None])
     """
     character_data (List[Optional[CharacterData]]): The character's data of both characters.
     Index 0 is player 1, and index 1 is player 2.
     """
-    current_frame_number: int
+    current_frame_number: int = -1
     """
     current_frame_number (int): The current frame of the round.
     """
-    current_round: int
+    current_round: int = -1
     """
     current_round (int): The current round number.
     """
-    projectile_data: List[AttackData]
+    projectile_data: List[AttackData] = field(default_factory=list)
     """
     projectile_data (List[AttackData]): The projectile data of both characters.
     """
-    empty_flag: bool
+    empty_flag: bool = True
     """
     empty_flag (bool): If this value is true, no data are available or they are dummy data.
     """
-    front: List[bool]
+    front: List[bool] = field(default_factory=lambda: [False, False])
     """
     front (List[bool]): The direction the character is facing for two players.\n
     Index 0 is player 1, and index 1 is player 2.\n
@@ -89,11 +89,4 @@ class FrameData(BaseModel):
             projectile_data=list(map(AttackData.from_proto, proto_obj.projectile_data)),
             empty_flag=proto_obj.empty_flag,
             front=list(proto_obj.front)
-        )
-    
-    @classmethod
-    def get_default_instance(cls):
-        return FrameData(
-            character_data=[CharacterData.get_default_instance() for _ in range(2)], current_frame_number=0,
-            current_round=0, projectile_data=[], empty_flag=True, front=[False, False]
         )
