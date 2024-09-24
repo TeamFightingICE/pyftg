@@ -38,6 +38,10 @@ Please refer to this [link](https://twine.readthedocs.io/en/stable/).
 ```sh
 python -m build
 ```
+if the above command doesn't work due to ```no module named build``` error, install ```build``` library then try again
+```sh
+pip install build
+```
 3. Push project to pypi
 ```sh
 twine upload dist/*
