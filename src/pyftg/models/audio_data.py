@@ -15,7 +15,7 @@ class AudioData(BaseModel):
 
     raw_data_bytes: bytes = b''
     """
-    raw_data_bytes (bytes): Raw audio data in wave format with 2 channels and 800 samples.
+    raw_data_bytes (bytes): Raw audio data in wave format with 2 channels and 1024 samples (800 actual samples and padded with zeros).
     """
     fft_data: List[FFTData] = field(default_factory=lambda: [FFTData(), FFTData()])
     """
@@ -48,4 +48,3 @@ class AudioData(BaseModel):
             fft_data=list(map(FFTData.from_proto, proto_obj.fft_data)),
             spectrogram_data_bytes=proto_obj.spectrogram_data_as_bytes
         )
-    
