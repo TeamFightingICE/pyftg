@@ -52,7 +52,10 @@ class DisplayInfo(AIInterface):
         self.cc.skill_cancel()
 
         # calculate the distance
-        distance = self.calculate_distance(self.screen_data.display_bytes)
+        try:
+            distance = self.calculate_distance(self.screen_data.display_bytes)
+        except:
+            distance = 0
         if distance == -1:
             self.cc.command_call("STAND_A") # default action
         else:
