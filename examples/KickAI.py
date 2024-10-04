@@ -56,3 +56,6 @@ class KickAI(AIInterface):
 
     def game_end(self):
         logger.info("game end")
+        
+    def close(self):
+        pass
